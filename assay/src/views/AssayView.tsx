@@ -2,6 +2,7 @@ import { ShieldCheck } from 'lucide-react'
 import InputPanel from '../components/InputPanel'
 import ScoreCard from '../components/ScoreCard'
 import PackageTabs from '../components/PackageTabs'
+import IntegrityWarning from '../components/IntegrityWarning'
 import PrepCard from '../components/PrepCard'
 import NotesCard from '../components/NotesCard'
 import StatusPill from '../components/StatusPill'
@@ -148,6 +149,7 @@ export default function AssayView({
         ) : result && justRunAssay ? (
           <>
             <ScoreCard result={result} />
+            <IntegrityWarning result={result} masterResume={resume} />
             <PackageTabs result={result} onExportPdf={onExportPdf} />
             <PrepCard
               key={justRunAssay.id}

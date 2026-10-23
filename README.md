@@ -30,7 +30,7 @@ There is no backend. Your resume, API keys, and assay history live only in your 
 
 ## Anti-fabrication
 
-The system prompt forbids inventing experience, metrics, employers, or skills — content may only be reframed, reordered, and emphasized from what actually exists in your real resume. A dedicated fact-check reviewer names anything that was softened, stretched, or is unsupported, and confirms what traces to real evidence.
+The system prompt forbids inventing experience, metrics, employers, or skills — content may only be reframed, reordered, and emphasized from what actually exists in your real resume. A dedicated fact-check reviewer names anything that was softened, stretched, or is unsupported, and confirms what traces to real evidence. A code-level integrity check also cross-references every generated CV against the real resume and flags any skill that slipped in without evidence — gaps stay gaps.
 
 ## Run locally
 
