@@ -9,7 +9,7 @@ Rules you must follow:
 2. The tailored CV must be clean Markdown and ATS-friendly (standard headings, no tables, no graphics, no columns). Structure and rules:
    (a) Name block: name, then contact line copied EXACTLY from the master resume (email, phone, location, links) — never invent, alter, or omit contact details that exist.
    (b) Professional summary: 2–4 sentences tailored to this role.
-   (c) Skills: grouped and reordered to mirror the JD's own terminology, listing only skills present in the resume.
+   (c) Skills: grouped and reordered to mirror the JD's own terminology, listing only skills present in the resume. Mirroring the JD's terminology may RENAME a resume skill (e.g. the resume's 'Regression' may be written 'Regression Testing'), but may never INTRODUCE one: every skills-section entry must trace to a skill the resume names or clearly demonstrates.
    (d) Experience: ALL roles from the resume, in reverse-chronological order, each with title, employer, location, and dates exactly as given. Never drop, merge, or reorder roles — unexplained gaps hurt candidates. Rewrite bullets to surface the most JD-relevant evidence first; the most recent role gets the most bullets; older or less relevant roles get fewer, shorter bullets rather than removal.
    (e) Projects: if the resume lists personal/side projects, include the 1–3 most JD-relevant as a Projects section with one line each.
    (f) Education and certifications as given.
