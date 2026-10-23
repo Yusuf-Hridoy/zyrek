@@ -1,6 +1,8 @@
-# Argus
+# Zyrek
 
-*A personal career toolkit, built for one. First module: **Assay**.*
+*a personal career toolkit, built for one. First module: **Assay** — the honest examiner: it reads the job, reads you, and tells you the truth before you hit apply.*
+
+**Live demo:** https://zyrek-beryl-zeta.vercel.app/
 
 ## Assay — paste any job, get a tailored, graded application
 
