@@ -9,9 +9,10 @@
  * Matching is graduated, because rule 2(c) of the system prompt deliberately
  * tells the model to mirror JD terminology: a REAL resume skill may arrive
  * renamed ("Regression" → "Regression Testing", "managed the defect
- * lifecycle" → "Defect Lifecycle Management"), and that must not flag.
- * skillSupported() therefore tolerates generic-suffix additions and simple
- * plural drift, while still catching skills the resume never names.
+ * lifecycle" → "Defect Lifecycle Management", "Click Up" → "ClickUp"), and
+ * that must not flag. skillSupported() therefore tolerates generic-suffix
+ * additions, simple plural drift, and one-word/two-word spacing variants,
+ * while still catching skills the resume never names.
  *
  * Known abbreviation asymmetry, accepted deliberately: a resume writing
  * "JavaScript (JS)" lets both forms through, because the parenthetical pair
@@ -61,9 +62,40 @@ function containsTolerant(haystack: string, phrase: string): boolean {
   return variants.some((v) => containsNorm(haystack, v))
 }
 
+/** Precomputed resume shape for the matcher: words + joined adjacent pairs. */
+interface ResumeSig {
+  norm: string
+  words: Set<string>
+  bigrams: Set<string> // adjacent word pairs joined: "click"+"up" → "clickup"
+}
+
+function buildResumeSig(resumeNorm: string): ResumeSig {
+  const arr = resumeNorm.split(' ').filter(Boolean)
+  const bigrams = new Set<string>()
+  for (let i = 0; i + 1 < arr.length; i++) bigrams.add(arr[i] + arr[i + 1])
+  return { norm: resumeNorm, words: new Set(arr), bigrams }
+}
+
+/**
+ * Does a phrase match the resume? Plain containment with plural tolerance,
+ * plus the compact-bigram spacing rule (EXACT equality only, never substring,
+ * so "java" still cannot ride inside "javascript"):
+ *  - a single word (len ≥5) equal to a joined resume bigram ("clickup");
+ *  - a two-word phrase whose words joined equal a single resume word
+ *    ("click up" vs a resume writing "ClickUp").
+ */
+function matchesPhrase(sig: ResumeSig, phrase: string): boolean {
+  if (containsTolerant(sig.norm, phrase)) return true
+  const parts = phrase.split(' ')
+  if (parts.length === 1 && parts[0].length >= 5 && sig.bigrams.has(parts[0])) return true
+  if (parts.length === 2 && sig.words.has(parts[0] + parts[1])) return true
+  return false
+}
+
 /**
  * Generic suffix words a model adds when mirroring JD phrasing. Dropping
  * them tests the skill's core name ("regression testing" → "regression").
+ * Every entry slightly weakens the tripwire — add reluctantly.
  */
 const GENERIC_SUFFIXES = new Set([
   'testing',
@@ -75,6 +107,8 @@ const GENERIC_SUFFIXES = new Set([
   'methodology',
   'skills',
   'analysis',
+  'detection',
+  'verification',
 ])
 
 /** True when every word of the token is only a generic suffix ("Testing",
@@ -85,22 +119,30 @@ function isOnlyGenericSuffixes(token: string): boolean {
 
 /**
  * Is a CV skills token supported by the master resume?
- *  1. full normalized phrase containment (with plural tolerance);
+ *  1. full normalized phrase containment (plural + spacing variants);
  *  2. while the phrase has >1 word and its LAST word is a generic suffix,
  *     drop that word and retry on the remainder — "manual test execution"
  *     → "manual test" → "manual", each retested;
- *  3. plural tolerance applies at every step above.
+ *  3. plural and spacing tolerance apply at every step above.
  * Anything still unsupported is a genuine introduction candidate.
  */
-function skillSupported(token: string, resumeNorm: string): boolean {
-  if (containsTolerant(resumeNorm, token)) return true
+function skillSupported(token: string, sig: ResumeSig): boolean {
+  if (matchesPhrase(sig, token)) return true
   let phrase = token
   while (phrase.includes(' ') && GENERIC_SUFFIXES.has(phrase.split(' ').pop()!)) {
     phrase = phrase.split(' ').slice(0, -1).join(' ')
-    if (phrase && containsTolerant(resumeNorm, phrase)) return true
+    if (phrase && matchesPhrase(sig, phrase)) return true
   }
   return false
 }
+
+/**
+ * Compound skills often join independent items with '&', '/' or 'and'
+ * ("Smoke & Sanity Testing"). Split into sub-tokens and check each on its
+ * own — the bare "Smoke" passes by itself, "Sanity Testing" strips to
+ * "sanity"; only genuinely unsupported sub-tokens get flagged.
+ */
+const CONJUNCTION_SPLIT = /\s*(?:&|\/|\band\b)\s*/i
 
 /**
  * Locate the CV's skills section: the block between the first '#'-prefixed
@@ -125,7 +167,7 @@ function skillsSectionLines(cv: string): string[] | null {
 
 export function checkStuffing(result: AssayResult, masterResume: string): StuffingReport {
   const cvNorm = normalize(result.tailoredCv)
-  const resumeNorm = normalize(masterResume)
+  const resumeSig = buildResumeSig(normalize(masterResume))
 
   // gapLeaks: MISSING-evidence signals whose skill text leaked into the CV.
   // Skills of 1–2 normalized chars are skipped (too noisy: "C", "R", "Go"…).
@@ -153,12 +195,15 @@ export function checkStuffing(result: AssayResult, masterResume: string): Stuffi
       const afterColon = raw.includes(':') ? raw.slice(raw.indexOf(':') + 1) : raw
       const cleaned = afterColon.replace(/\*/g, '')
       for (const piece of cleaned.split(',')) {
-        const token = normalize(piece)
-        if (token.length < 3 || seenUnknown.has(token)) continue
-        seenUnknown.add(token)
-        if (isOnlyGenericSuffixes(token)) continue // "Testing" alone — no skill identity
-        if (!skillSupported(token, resumeNorm)) {
-          unknownSkills.push(piece.trim()) // CV's display casing
+        for (const sub of piece.split(CONJUNCTION_SPLIT)) {
+          const display = sub.trim()
+          const token = normalize(display)
+          if (token.length < 3 || seenUnknown.has(token)) continue
+          seenUnknown.add(token)
+          if (isOnlyGenericSuffixes(token)) continue // "Testing" alone — no skill identity
+          if (!skillSupported(token, resumeSig)) {
+            unknownSkills.push(display) // sub-token's display casing
+          }
         }
       }
     }
