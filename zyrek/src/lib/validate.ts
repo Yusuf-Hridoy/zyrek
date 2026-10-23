@@ -35,14 +35,14 @@ export function unescapeArtifacts(s: string): string {
 
 export function validateAssayResult(obj: unknown): AssayResult {
   if (typeof obj !== 'object' || obj === null) {
-    throw new Error('The model returned an unusable response. Run the assay again.')
+    throw new Error('The model returned an unusable response. Run Zyrek again.')
   }
   const raw = obj as Record<string, unknown>
 
   const tailoredCv = unescapeArtifacts(asString(raw.tailoredCv))
   const coverLetter = unescapeArtifacts(asString(raw.coverLetter))
   if (!tailoredCv.trim() && !coverLetter.trim()) {
-    throw new Error('The model returned an unusable response. Run the assay again.')
+    throw new Error('The model returned an unusable response. Run Zyrek again.')
   }
 
   const roleTitle = asString(raw.roleTitle) || 'Untitled role'

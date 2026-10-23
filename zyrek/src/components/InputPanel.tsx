@@ -161,7 +161,7 @@ export default function InputPanel({
             <textarea
               value={resume}
               onChange={(e) => setResume(e.target.value)}
-              placeholder="Paste your full master resume here once — it stays in your browser. Every assay tailors from this."
+              placeholder="Paste your full master resume here once — it stays in your browser. Every run tailors from this."
               className="h-52 w-full resize-none rounded-lg border border-[#e2dccb] bg-[#f2eee2]/50 px-3.5 py-3 text-[13.5px] leading-relaxed text-[#26221b] placeholder:text-[#a39b86] focus:border-[#b3492b]/40 focus:outline-none"
             />
           )}
@@ -205,7 +205,7 @@ export default function InputPanel({
           }`}
         >
           <Sparkles className="h-4.5 w-4.5" />
-          {loading ? loadingStage || 'Working…' : 'Assay my application'}
+          {loading ? loadingStage || 'Working…' : 'Grade my application'}
         </button>
         <p className="mt-3 text-center text-[12.5px] text-[#8a8371]">
           Tailors your CV + cover letter, then a 3-reviewer panel grades it. ~20

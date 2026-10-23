@@ -34,7 +34,7 @@ export function extractJson(text: string): unknown {
   try {
     return JSON.parse(cleaned)
   } catch {
-    throw new Error('The model returned malformed JSON. Run the assay again.')
+    throw new Error('The model returned malformed JSON. Run Zyrek again.')
   }
 }
 

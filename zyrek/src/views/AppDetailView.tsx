@@ -92,7 +92,7 @@ export default function AppDetailView({
       <section className="max-w-3xl pt-10 pb-16">
         <BackLink />
         <p className="mt-6 text-[14px] text-[#8a8371]">
-          This assay no longer exists.
+          This application no longer exists.
         </p>
       </section>
     )

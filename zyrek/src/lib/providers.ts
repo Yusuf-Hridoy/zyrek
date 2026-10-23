@@ -73,8 +73,10 @@ export class RateLimitError extends Error {
   }
 }
 
-const KEYS_KEY = 'assay.keys'
-const ACTIVE_KEY = 'assay.provider'
+const KEYS_KEY = 'zyrek.keys'
+const ACTIVE_KEY = 'zyrek.provider'
+const RENAMED_KEYS_KEY = 'assay.keys' // pre-rename name — read once, migrated on read
+const RENAMED_ACTIVE_KEY = 'assay.provider'
 const LEGACY_KEY = 'assay.geminiKey'
 
 function isProviderId(v: unknown): v is ProviderId {
@@ -83,7 +85,18 @@ function isProviderId(v: unknown): v is ProviderId {
 
 export function loadKeys(): Partial<Record<ProviderId, string>> {
   try {
-    const raw = localStorage.getItem(KEYS_KEY)
+    let raw = localStorage.getItem(KEYS_KEY)
+    if (raw === null) {
+      const renamed = localStorage.getItem(RENAMED_KEYS_KEY)
+      if (renamed !== null) {
+        try {
+          localStorage.setItem(KEYS_KEY, renamed)
+        } catch {
+          // storage unavailable — still serve the renamed value in memory
+        }
+        raw = renamed
+      }
+    }
     if (raw === null) {
       const legacy = localStorage.getItem(LEGACY_KEY)
       if (legacy !== null) {
@@ -129,7 +142,9 @@ export function loadActiveProvider(
   keys: Partial<Record<ProviderId, string>>,
 ): ProviderId {
   try {
-    const raw = localStorage.getItem(ACTIVE_KEY)
+    // falls back to the pre-rename `assay.provider` value (migrates on next save)
+    const raw =
+      localStorage.getItem(ACTIVE_KEY) ?? localStorage.getItem(RENAMED_ACTIVE_KEY)
     if (isProviderId(raw) && keys[raw]) return raw
   } catch {
     // fall through to key-based fallback

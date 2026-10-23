@@ -95,7 +95,7 @@ export default function PackageTabs({
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `assay-${parts.join('-') || 'package'}.md`
+    a.download = `zyrek-${parts.join('-') || 'package'}.md`
     a.click()
     URL.revokeObjectURL(url)
   }

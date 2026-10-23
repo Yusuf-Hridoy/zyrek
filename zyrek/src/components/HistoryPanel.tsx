@@ -182,7 +182,7 @@ export default function HistoryPanel({
                           <span
                             role="button"
                             tabIndex={0}
-                            aria-label="Delete this assay"
+                            aria-label="Delete this entry"
                             className="shrink-0 rounded p-1 text-[#8a8371] transition-colors hover:text-[#b3492b]"
                             onClick={(e) => {
                               e.stopPropagation()

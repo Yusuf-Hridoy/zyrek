@@ -1,19 +1,19 @@
-# AGENTS.md — Zyrek / Assay
+# AGENTS.md — Zyrek
 
 Instructions for any AI coding agent working in this repo. Read fully before touching code. When a task brief conflicts with this file, the brief wins; when existing code conflicts with a brief, the brief wins.
 
 ## What this project is
 
-**Zyrek** is a personal career toolkit owned and used by one person. Its first module, **Assay**, takes a master resume + a pasted job description, makes ONE structured AI call, and returns a graded application package: verdict + score /100, 5 scoring dimensions with notes, a 3-reviewer panel (RECRUITER / HIRING MGR / FACT-CHECK), tailored CV (markdown), cover letter, form answers, and skill signals. Around that core: an application tracker (statuses, notes, contacts), a follow-up radar, cross-application insights, interview prep packs with flashcards, re-run score diffing, PDF export, and JSON backup/restore.
+**Zyrek** is a personal career toolkit owned and used by one person. It takes a master resume + a pasted job description, makes ONE structured AI call, and returns a graded application package: verdict + score /100, 5 scoring dimensions with notes, a 3-reviewer panel (RECRUITER / HIRING MGR / FACT-CHECK), tailored CV (markdown), cover letter, form answers, and skill signals. Around that core: an application tracker (statuses, notes, contacts), a follow-up radar, cross-application insights, interview prep packs with flashcards, re-run score diffing, PDF export, and JSON backup/restore.
 
-- Live: https://zyrek-beryl-zeta.vercel.app/ (static Vite build on Vercel; root directory `assay`)
-- App code lives in `/assay`. Screenshots in `/docs/screenshots`.
+- Live: https://zyrek-beryl-zeta.vercel.app/ (static Vite build on Vercel; root directory `zyrek`)
+- App code lives in `/zyrek`. Screenshots in `/docs/screenshots`.
 - **100% client-side.** No backend, no database, no accounts. User-supplied API keys; browser → AI provider directly; everything persists in localStorage only. This is a core product promise ("Built for one · never uploaded") — never add a server, telemetry, or external storage.
 
 ## Commands
 
 ```bash
-cd assay
+cd zyrek
 npm install
 npm run dev       # local dev
 npm run build     # tsc -b && vite build — must pass before any commit
@@ -30,7 +30,7 @@ There is no test suite yet (deliberately deferred). Do not add tests, CI, or new
 
 ## Architecture map
 
-State lives in **`src/App.tsx` only**. Views are layout shells that receive props. Hash routes: `#/` Assay (core loop + fresh result) · `#/pipeline` (radar, stats, history) · `#/app/{id}` (one application: scorecard, package, prep, notes) · `#/insights` · `#/settings` (providers, backup).
+State lives in **`src/App.tsx` only**. Views are layout shells that receive props. Hash routes: `#/` Zyrek (core loop + fresh result) · `#/pipeline` (radar, stats, history) · `#/app/{id}` (one application: scorecard, package, prep, notes) · `#/insights` · `#/settings` (providers, backup).
 
 `src/lib/` (all self-explanatory names — keep it that way):
 - `providers.ts` — provider registry (gemini / groq / openai / anthropic), per-provider key storage, `RateLimitError`
@@ -38,22 +38,22 @@ State lives in **`src/App.tsx` only**. Views are layout shells that receive prop
 - `openaiCompat.ts` — Groq/OpenAI caller (`response_format: json_object`; **omit `temperature` for OpenAI** — GPT-5.x rejects it) + exported `extractJson` hardening (fence strip → first `{` to last `}` → parse)
 - `anthropic.ts` — native Messages API; requires headers `anthropic-version` and `anthropic-dangerous-direct-browser-access: true` and a `max_tokens`; no JSON mode, so output goes through `extractJson`
 - `runAssay.ts` / `prep.ts` / `followup.ts` — dispatch by provider kind + ONE-shot failover to the next provider with a saved key on `RateLimitError` only (never on invalid keys or 4xx)
-- `storage.ts` — `SavedAssay` shape, `assay.history` (newest first, cap 50, read-time migration for missing fields, QuotaExceeded evict-half-and-retry)
+- `storage.ts` — `SavedAssay` shape, `zyrek.history` (newest first, cap 50, read-time migration for missing fields, QuotaExceeded evict-half-and-retry)
 - `validate.ts` — repair-first validators (clamp, fallback, synthesize; throw only when unusable) + `unescapeArtifacts`
 - `radar.ts` / `insights.ts` — pure functions, no React, no `Date.now()` inside (timestamps passed in)
 - `markdown.tsx` — safe markdown → React elements (never `dangerouslySetInnerHTML`), screen + print variants
-- `router.ts`, `backup.ts`, `ics.ts`, `print.ts`, `ui.ts` (shared `cardClass`, `microLabel`, `STATUS_STYLES`, slug helper), `extractResume.ts`
+- `router.ts`, `backup.ts`, `ics.ts`, `print.ts`, `stuffingCheck.ts` (pure gap-discipline verifier: flags CV skills with no resume evidence), `ui.ts` (shared `cardClass`, `microLabel`, `STATUS_STYLES`, slug helper), `extractResume.ts`
 
 ## Rules that protect the AI layer
 
-1. The shared assay `SYSTEM_PROMPT` in `gemini.ts` is the single source of truth (openaiCompat/anthropic import it). Its numbered rules include anti-fabrication (rule 1 — nothing invented, ever), CV structure, cover-letter structure with banned openers, scoring rubric anchors, knockout-requirements cap, and level-mismatch handling. **Never edit, renumber, or "improve" prompt rules unless a brief says exactly which rule to change.**
+1. The shared Zyrek `SYSTEM_PROMPT` in `gemini.ts` is the single source of truth (openaiCompat/anthropic import it). Its numbered rules include anti-fabrication (rule 1 — nothing invented, ever), CV structure, cover-letter structure with banned openers, scoring rubric anchors, knockout-requirements cap, level-mismatch handling, and gap discipline (rule 15 — MISSING-evidence skills never enter the package). **Never edit, renumber, or "improve" prompt rules unless a brief says exactly which rule to change.**
 2. Prep and follow-up prompts live in their own files and never touch the assay prompt.
 3. Never duplicate provider logic — reuse `PROVIDERS`, `RateLimitError`, `extractJson`, and the existing dispatch/failover pattern.
 4. Model responses are untrusted: everything goes through a validator before the app sees it. Validators repair; they throw only on fundamentally unusable output. Error messages always tell the user what to do next ("…Run the assay again.").
 
 ## Rules that protect user data
 
-- localStorage keys: `assay.history`, `assay.keys`, `assay.provider`, `assay.masterResume`. **Never rename a key or change a stored shape without an explicit migration instruction in a brief.** New fields on `SavedAssay` are optional with read-time migration — never a rewrite pass over stored data.
+- localStorage keys: `zyrek.history`, `zyrek.keys`, `zyrek.provider`, `zyrek.masterResume`. **Never rename a key or change a stored shape without an explicit migration instruction in a brief.** New fields on `SavedAssay` are optional with read-time migration — never a rewrite pass over stored data. (Pre-rename `assay.*` keys from before the Argus→Zyrek rename are read-time migrated: first read copies the value to the new key, old keys left in place as a safety net; backups exported under the old names still import.)
 - `backup.ts` copies raw stored strings verbatim — keep it that way.
 - API keys never leave the browser except inside the direct provider request.
 
@@ -68,7 +68,7 @@ State lives in **`src/App.tsx` only**. Views are layout shells that receive prop
 
 ## UX discipline (binding on every change)
 
-- The Assay page stays almost empty — nothing new ever lands there. Features live on Pipeline / AppDetail / Insights / Settings.
+- The Zyrek page stays almost empty — nothing new ever lands there. Features live on Pipeline / AppDetail / Insights / Settings.
 - Quiet empty states: a feature with no data renders NOTHING (no teaser, no locked state, no empty shell). The page with no data must look like the feature doesn't exist.
 - Zero layout shift from state changes; one accordion/dropdown open at a time; Escape and click-outside close popovers; keyed components (`key={assay.id}`) where per-assay state could bleed.
 - Mobile: everything must work at 380px width; touch targets ≥32px; no nested scroll boxes (the page scrolls; sticky bars are fine — remember `overflow-hidden` on an ancestor breaks `position: sticky`).

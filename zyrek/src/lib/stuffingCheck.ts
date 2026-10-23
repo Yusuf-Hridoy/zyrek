@@ -1,7 +1,7 @@
 /**
  * Code-level gap-discipline verifier (pure, no React, no Date.now()).
  *
- * Cross-checks a generated tailored CV against the assay's skill signals and
+ * Cross-checks a generated tailored CV against the run's skill signals and
  * the master resume, catching skills that slipped into the package without
  * resume evidence. This is a heuristic tripwire, not a court: when in doubt
  * it stays quiet (favor missing a borderline case over false-flagging).

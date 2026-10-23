@@ -7,10 +7,10 @@
  */
 
 const BACKUP_KEYS = [
-  'assay.history',
-  'assay.keys',
-  'assay.provider',
-  'assay.masterResume',
+  'zyrek.history',
+  'zyrek.keys',
+  'zyrek.provider',
+  'zyrek.masterResume',
 ] as const
 
 export function exportBackup(): void {
@@ -47,7 +47,10 @@ export async function importBackup(file: File): Promise<{ restored: string[] }> 
   }
   const restored: string[] = []
   for (const key of BACKUP_KEYS) {
-    const value = (data as Record<string, unknown>)[key]
+    const record = data as Record<string, unknown>
+    // Backups exported before the Zyrek rename store the same values under
+    // `assay.*` keys — accept them so old files keep importing.
+    const value = record[key] ?? record[`assay.${key.slice('zyrek.'.length)}`]
     if (typeof value === 'string') {
       localStorage.setItem(key, value)
       restored.push(key)

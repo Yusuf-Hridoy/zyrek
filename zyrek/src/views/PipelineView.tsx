@@ -35,7 +35,7 @@ export default function PipelineView({
       <section className="max-w-3xl pt-10 pb-6">
         <h1 className="text-3xl font-bold tracking-tight">Pipeline</h1>
         <p className="mt-2 text-[14px] text-[#6f6858]">
-          Every application you've assayed, with its status.
+          Every application you've run, with its status.
         </p>
       </section>
 

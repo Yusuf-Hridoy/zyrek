@@ -24,7 +24,7 @@ export default function ScoreCard({ result }: { result: AssayResult }) {
       <div className="flex items-center justify-between border-b border-[#e2dccb] px-6 py-3">
         <div className="flex items-center gap-2">
           <div className="h-3 w-3 rounded-[3px] bg-[#26221b]" />
-          <span className="text-[15px] font-semibold">Assay</span>
+          <span className="text-[15px] font-semibold">Zyrek</span>
         </div>
         <span className={labelClass}>Graded Package</span>
       </div>
@@ -61,9 +61,9 @@ export default function ScoreCard({ result }: { result: AssayResult }) {
         </div>
       </div>
 
-      {/* DIMENSION ASSAY */}
+      {/* DIMENSION SCORES */}
       <div className="border-b border-[#e2dccb] px-6 py-5">
-        <p className={labelClass}>Dimension Assay</p>
+        <p className={labelClass}>Dimension Scores</p>
         <div className="mt-2">
           {result.dimensions.map((d) => (
             <div key={d.label} className="py-2.5">

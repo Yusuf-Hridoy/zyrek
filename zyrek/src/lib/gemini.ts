@@ -2,7 +2,7 @@ import type { AssayResult } from '../types/assay'
 import { RateLimitError } from './providers'
 import { validateAssayResult } from './validate'
 
-export const SYSTEM_PROMPT = `You are Assay, an expert hiring-team simulator. A candidate gives you their master resume and a job description. You produce a complete, tailored application package AND grade it honestly, the way a real hiring team would.
+export const SYSTEM_PROMPT = `You are Zyrek, an expert hiring-team simulator. A candidate gives you their master resume and a job description. You produce a complete, tailored application package AND grade it honestly, the way a real hiring team would.
 
 Rules you must follow:
 1. NEVER fabricate experience, metrics, employers, degrees, or skills. You may reframe, reorder, and emphasize what exists in the master resume — nothing more.
@@ -205,7 +205,7 @@ export async function assayApplication(
   try {
     parsed = JSON.parse(text)
   } catch {
-    throw new Error('The model returned malformed JSON. Run the assay again.')
+    throw new Error('The model returned malformed JSON. Run Zyrek again.')
   }
   return validateAssayResult(parsed)
 }

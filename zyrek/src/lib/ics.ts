@@ -41,13 +41,13 @@ export function downloadFollowUpIcs(
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Zyrek//Assay//EN',
+    'PRODID:-//Zyrek//EN',
     'BEGIN:VEVENT',
     `UID:${a.id}-${Date.now()}@zyrek`,
     `DTSTAMP:${dtstamp}`,
     `DTSTART;VALUE=DATE-TIME:${dtstart}`,
     `SUMMARY:${icsEscape(`Follow up — ${a.roleTitle} at ${a.company}`)}`,
-    `DESCRIPTION:${icsEscape('Nudge from Zyrek/Assay.')}`,
+    `DESCRIPTION:${icsEscape('Nudge from Zyrek.')}`,
     'END:VEVENT',
     'END:VCALENDAR',
   ]

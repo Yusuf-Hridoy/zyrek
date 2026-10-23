@@ -138,7 +138,7 @@ export function ProviderManagerContent({
       <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#8a8371]">
         Keys are stored only in this browser. Gemini and Groq keys are free;
         OpenAI and Claude are paid per use. If the active provider is
-        rate-limited, Assay retries on another provider you've added.
+        rate-limited, Zyrek retries on another provider you've added.
       </p>
 
       <div className="max-h-[60vh] overflow-y-auto">

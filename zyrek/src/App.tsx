@@ -20,6 +20,7 @@ import {
   deleteAssay,
   updateAssay,
   markFollowedUp,
+  readMigratedKey,
   type AppStatus,
   type SavedAssay,
 } from './lib/storage'
@@ -39,7 +40,9 @@ export default function App() {
     loadActiveProvider(loadKeys()),
   )
 
-  const [resume, setResume] = useState(() => localStorage.getItem('assay.masterResume') ?? '')
+  const [resume, setResume] = useState(
+    () => readMigratedKey('zyrek.masterResume', 'assay.masterResume') ?? '',
+  )
   const [resumeSaved, setResumeSaved] = useState(false)
   const [jd, setJd] = useState('')
   const [loading, setLoading] = useState(false)
@@ -92,14 +95,14 @@ export default function App() {
 
   const saveResume = () => {
     if (!resume.trim()) return
-    localStorage.setItem('assay.masterResume', resume)
+    localStorage.setItem('zyrek.masterResume', resume)
     setResumeSaved(true)
     setTimeout(() => setResumeSaved(false), 2000)
   }
 
   const handleFileLoaded = (text: string) => {
     setResume(text)
-    localStorage.setItem('assay.masterResume', text)
+    localStorage.setItem('zyrek.masterResume', text)
     setResumeSaved(true)
     setTimeout(() => setResumeSaved(false), 2000)
   }
@@ -283,7 +286,7 @@ export default function App() {
     route.view === 'app' ? (history.find((h) => h.id === route.id) ?? null) : null
 
   const tabs: { view: 'assay' | 'pipeline' | 'insights'; label: string }[] = [
-    { view: 'assay', label: 'Assay' },
+    { view: 'assay', label: 'Zyrek' },
     {
       view: 'pipeline',
       label: history.length > 0 ? `Pipeline · ${history.length}` : 'Pipeline',
@@ -298,7 +301,7 @@ export default function App() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-5 py-4">
           <div className="flex items-center gap-2.5">
             <div className="h-4 w-4 rounded-[4px] bg-[#26221b]" />
-            <span className="text-lg font-bold tracking-tight">Assay</span>
+            <span className="text-lg font-bold tracking-tight">Zyrek</span>
             <span className="ml-2 hidden font-mono text-[11px] uppercase tracking-[0.18em] text-[#8a8371] sm:inline">
               Personal · Private
             </span>

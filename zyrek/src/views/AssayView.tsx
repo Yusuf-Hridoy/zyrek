@@ -98,7 +98,7 @@ export default function AssayView({
 
         {error && !loading && (
           <div className="rounded-xl border border-[#e3b39d] bg-[#f7e8e0] px-5 py-4 text-[13.5px] leading-relaxed text-[#8a3418]">
-            <span className="font-bold">Assay failed.</span> {error}
+            <span className="font-bold">Zyrek failed.</span> {error}
           </div>
         )}
         {warning && !loading && (
@@ -108,7 +108,7 @@ export default function AssayView({
         )}
         {fallbackInfo && !loading && (
           <div className="rounded-lg border border-[#e0c795] bg-[#f3e8d3] px-4 py-2.5 text-[13px] text-[#8a5a1d]">
-            {fallbackInfo.from} was rate-limited — this assay ran on{' '}
+            {fallbackInfo.from} was rate-limited — this run ran on{' '}
             {fallbackInfo.used} instead.
           </div>
         )}
@@ -171,8 +171,8 @@ export default function AssayView({
               <ShieldCheck className="h-8 w-8 text-[#b6ad97]" />
               <p className="text-[14px] leading-relaxed text-[#8a8371]">
                 {hasAnyKey
-                  ? 'Your graded package will appear here — match score, dimension assay, and the three-reviewer panel.'
-                  : 'Add an API key first (Settings — top right) — Gemini, Groq, OpenAI, or Claude — then paste a job description and run your first assay.'}
+                  ? 'Your graded package will appear here — match score, dimension breakdown, and the three-reviewer panel.'
+                  : 'Add an API key first (Settings — top right) — Gemini, Groq, OpenAI, or Claude — then paste a job description and run your first Zyrek.'}
               </p>
             </div>
           </div>

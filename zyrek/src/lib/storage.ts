@@ -34,8 +34,27 @@ export const STATUS_LABELS: Record<AppStatus, string> = {
   REJECTED: 'Rejected',
 }
 
-const KEY = 'assay.history'
+const KEY = 'zyrek.history'
+const LEGACY_KEY = 'assay.history' // pre-rename name — read once, migrated on read
 const MAX_ENTRIES = 50
+
+/**
+ * Read a stored string, falling back to its pre-rename `assay.*` key. On the
+ * first fallback hit the value is copied to the new key so later reads (and
+ * backups) use it; the old key is left untouched as a safety net.
+ */
+export function readMigratedKey(newKey: string, oldKey: string): string | null {
+  const value = localStorage.getItem(newKey)
+  if (value !== null) return value
+  const legacy = localStorage.getItem(oldKey)
+  if (legacy === null) return null
+  try {
+    localStorage.setItem(newKey, legacy)
+  } catch {
+    // storage unavailable — still serve the legacy value in memory
+  }
+  return legacy
+}
 
 function normalizeContact(c: unknown): SavedAssay['contact'] | undefined {
   if (typeof c !== 'object' || c === null) return undefined
@@ -73,7 +92,7 @@ function migrate(e: SavedAssay): SavedAssay {
 
 function read(): SavedAssay[] {
   try {
-    const raw = localStorage.getItem(KEY)
+    const raw = readMigratedKey(KEY, LEGACY_KEY)
     if (!raw) return []
     const parsed: unknown = JSON.parse(raw)
     if (!Array.isArray(parsed)) return []
@@ -106,7 +125,7 @@ function writeQuotaSafe(list: SavedAssay[]): void {
       write(list.slice(0, half))
     } catch {
       throw new Error(
-        'Could not save to history — browser storage is full. Delete some old assays.',
+        'Could not save to history — browser storage is full. Delete some old entries.',
       )
     }
   }
