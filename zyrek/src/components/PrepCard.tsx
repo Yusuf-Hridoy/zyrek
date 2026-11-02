@@ -50,8 +50,8 @@ const CONF_LABELS: Record<PrepConfidence, string> = {
 }
 
 const CONF_STYLES: Record<PrepConfidence, string> = {
-  READY: 'text-[#8a8371]',
-  PRACTICE: 'text-[#8a8371]',
+  READY: 'text-[#5d574a]',
+  PRACTICE: 'text-[#5d574a]',
   RISKY: 'text-[#9c3d1e]',
 }
 
@@ -188,7 +188,7 @@ export default function PrepCard({
         <div className="flex min-w-0 items-center gap-2">
           <span className={microLabel}>Interview prep</span>
           {prep && (
-            <span className="truncate text-[11.5px] text-[#8a8371]">
+            <span className="truncate text-[11.5px] text-[#5d574a]">
               {questions.length} questions · {relativeDate(prep.generatedAt)}
             </span>
           )}
@@ -222,7 +222,7 @@ export default function PrepCard({
               <button
                 type="button"
                 onClick={() => setConfirmRegen(false)}
-                className="text-[12px] text-[#8a8371] transition-colors hover:text-[#4a4436]"
+                className="text-[12px] text-[#5d574a] transition-colors hover:text-[#4a4436]"
               >
                 Keep
               </button>
@@ -236,7 +236,7 @@ export default function PrepCard({
                 className={`rounded-lg p-1.5 transition-colors hover:bg-[#f2eee2] ${
                   mode === 'cards'
                     ? 'text-[#26221b]'
-                    : 'text-[#8a8371] hover:text-[#26221b]'
+                    : 'text-[#5d574a] hover:text-[#26221b]'
                 }`}
               >
                 <Layers className="h-4 w-4" />
@@ -245,7 +245,7 @@ export default function PrepCard({
                 type="button"
                 onClick={() => setConfirmRegen(true)}
                 disabled={generating}
-                className="flex items-center gap-1.5 rounded-lg px-1.5 py-1 text-[12px] text-[#8a8371] transition-colors hover:text-[#26221b] disabled:opacity-40"
+                className="flex items-center gap-1.5 rounded-lg px-1.5 py-1 text-[12px] text-[#5d574a] transition-colors hover:text-[#26221b] disabled:opacity-40"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Regenerate
@@ -261,12 +261,12 @@ export default function PrepCard({
         </p>
       )}
       {generating && prep && (
-        <p className="px-5 pt-3 text-[12px] text-[#8a8371]">
+        <p className="px-5 pt-3 text-[12px] text-[#5d574a]">
           Preparing questions…
         </p>
       )}
       {!prep && generating && (
-        <p className="px-5 py-4 text-[12px] text-[#8a8371]">
+        <p className="px-5 py-4 text-[12px] text-[#5d574a]">
           Preparing questions…
         </p>
       )}
@@ -306,7 +306,7 @@ export default function PrepCard({
                       </span>
                       <Confidence value={q.confidence} />
                       <ChevronDown
-                        className={`h-3.5 w-3.5 shrink-0 text-[#8a8371] transition-transform ${
+                        className={`h-3.5 w-3.5 shrink-0 text-[#5d574a] transition-transform ${
                           expanded === i ? 'rotate-180' : ''
                         }`}
                       />
@@ -314,7 +314,7 @@ export default function PrepCard({
                     {expanded === i && (
                       <div className="px-2 pb-3 pt-1">
                         {q.whyAsked && (
-                          <p className="text-[11.5px] italic leading-relaxed text-[#8a8371]">
+                          <p className="text-[11.5px] italic leading-relaxed text-[#5d574a]">
                             {q.whyAsked}
                           </p>
                         )}
@@ -344,7 +344,7 @@ export default function PrepCard({
                   {cardQuestion.answer}
                 </p>
                 {cardQuestion.whyAsked && (
-                  <p className="text-left text-[11.5px] italic leading-relaxed text-[#8a8371]">
+                  <p className="text-left text-[11.5px] italic leading-relaxed text-[#5d574a]">
                     {cardQuestion.whyAsked}
                   </p>
                 )}
@@ -354,7 +354,7 @@ export default function PrepCard({
               <button
                 type="button"
                 onClick={() => setRevealed(true)}
-                className="text-[12.5px] text-[#8a8371] underline underline-offset-2 transition-colors hover:text-[#26221b]"
+                className="text-[12.5px] text-[#5d574a] underline underline-offset-2 transition-colors hover:text-[#26221b]"
               >
                 Show answer
               </button>
@@ -365,18 +365,18 @@ export default function PrepCard({
               type="button"
               onClick={() => nav(-1)}
               aria-label="Previous question"
-              className="rounded-lg p-1.5 text-[#8a8371] transition-colors hover:bg-[#f2eee2] hover:text-[#26221b]"
+              className="rounded-lg p-1.5 text-[#5d574a] transition-colors hover:bg-[#f2eee2] hover:text-[#26221b]"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
-            <span className="flex-1 text-center font-mono text-[11.5px] tabular-nums text-[#8a8371]">
+            <span className="flex-1 text-center font-mono text-[11.5px] tabular-nums text-[#5d574a]">
               {current + 1} of {order.length}
             </span>
             <button
               type="button"
               onClick={() => nav(1)}
               aria-label="Next question"
-              className="rounded-lg p-1.5 text-[#8a8371] transition-colors hover:bg-[#f2eee2] hover:text-[#26221b]"
+              className="rounded-lg p-1.5 text-[#5d574a] transition-colors hover:bg-[#f2eee2] hover:text-[#26221b]"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -384,7 +384,7 @@ export default function PrepCard({
               type="button"
               onClick={shuffle}
               aria-label="Shuffle questions"
-              className="rounded-lg p-1.5 text-[#8a8371] transition-colors hover:bg-[#f2eee2] hover:text-[#26221b]"
+              className="rounded-lg p-1.5 text-[#5d574a] transition-colors hover:bg-[#f2eee2] hover:text-[#26221b]"
             >
               <Shuffle className="h-4 w-4" />
             </button>

@@ -69,7 +69,7 @@ export default function HistoryPanel({
               ))}
             </select>
           )}
-          <span className="shrink-0 text-[12px] text-[#8a8371]">
+          <span className="shrink-0 text-[12px] text-[#5d574a]">
             {filter === 'ALL'
               ? `${items.length} saved`
               : `${filtered.length}/${items.length} shown`}
@@ -78,7 +78,7 @@ export default function HistoryPanel({
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-label={open ? 'Collapse history' : 'Expand history'}
-            className="rounded-lg p-1 text-[#8a8371] transition-colors hover:bg-[#f2eee2] hover:text-[#4a4436]"
+            className="rounded-lg p-1 text-[#5d574a] transition-colors hover:bg-[#f2eee2] hover:text-[#4a4436]"
           >
             <ChevronDown
               className={`h-4 w-4 transition-transform ${open ? '' : '-rotate-90'}`}
@@ -90,11 +90,11 @@ export default function HistoryPanel({
       {open && (
         <div className="px-3 py-2">
           {items.length === 0 ? (
-            <p className="px-2 py-3 text-[13px] text-[#8a8371]">
+            <p className="px-2 py-3 text-[13px] text-[#5d574a]">
               Your saved assays will appear here after your first run.
             </p>
           ) : filtered.length === 0 ? (
-            <p className="px-2 py-3 text-[13px] text-[#8a8371]">
+            <p className="px-2 py-3 text-[13px] text-[#5d574a]">
               No assays with this status yet.
             </p>
           ) : (
@@ -128,7 +128,7 @@ export default function HistoryPanel({
                           <button
                             type="button"
                             onClick={() => setConfirmingId(null)}
-                            className="text-[12.5px] text-[#8a8371] transition-colors hover:text-[#4a4436]"
+                            className="text-[12.5px] text-[#5d574a] transition-colors hover:text-[#4a4436]"
                           >
                             Keep
                           </button>
@@ -150,12 +150,12 @@ export default function HistoryPanel({
                             <span className="font-bold tabular-nums">
                               {item.result.overallScore}
                             </span>
-                            <span className="ml-0.5 text-[11px] text-[#8a8371]">
+                            <span className="ml-0.5 text-[11px] text-[#5d574a]">
                               /100
                             </span>
                           </span>
                         </div>
-                        <div className="mt-1 flex items-center gap-2 text-[12.5px] text-[#8a8371]">
+                        <div className="mt-1 flex items-center gap-2 text-[12.5px] text-[#5d574a]">
                           <span
                             className="h-2.5 w-2.5 shrink-0 rounded-full"
                             style={{
@@ -169,7 +169,7 @@ export default function HistoryPanel({
                           <span className="mx-0 shrink-0">·</span>
                           <span className="shrink-0">{relativeDate(item.createdAt)}</span>
                           {item.rerunOf && (
-                            <span className="shrink-0 font-mono text-[10px] text-[#8a8371]">
+                            <span className="shrink-0 font-mono text-[10px] text-[#5d574a]">
                               · re-run
                             </span>
                           )}
@@ -183,7 +183,7 @@ export default function HistoryPanel({
                             role="button"
                             tabIndex={0}
                             aria-label="Delete this entry"
-                            className="shrink-0 rounded p-1 text-[#8a8371] transition-colors hover:text-[#b3492b]"
+                            className="shrink-0 rounded p-1 text-[#5d574a] transition-colors hover:text-[#b3492b]"
                             onClick={(e) => {
                               e.stopPropagation()
                               setConfirmingId(item.id)

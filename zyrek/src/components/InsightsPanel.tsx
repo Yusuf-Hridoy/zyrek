@@ -53,14 +53,14 @@ export default function InsightsPanel({
       <div className="flex items-center justify-between gap-2 border-b border-[#e2dccb] px-5 py-4">
         <span className={microLabel}>Insights</span>
         <div className="flex items-center gap-2">
-          <span className="text-[11.5px] text-[#8a8371]">
+          <span className="text-[11.5px] text-[#5d574a]">
             based on {data.withSignals} of {data.total} assays
           </span>
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-label={open ? 'Collapse insights' : 'Expand insights'}
-            className="rounded-lg p-1 text-[#8a8371] transition-colors hover:bg-[#f2eee2] hover:text-[#4a4436]"
+            className="rounded-lg p-1 text-[#5d574a] transition-colors hover:bg-[#f2eee2] hover:text-[#4a4436]"
           >
             <ChevronDown
               className={`h-4 w-4 transition-transform ${open ? '' : '-rotate-90'}`}
@@ -84,7 +84,7 @@ export default function InsightsPanel({
                 >
                   {agg.skill}
                 </Chip>
-                <span className="shrink-0 text-[11.5px] text-[#8a8371]">
+                <span className="shrink-0 text-[11.5px] text-[#5d574a]">
                   in {agg.totalJds}/{data.withSignals} JDs
                 </span>
                 <span className="ml-auto">
@@ -99,7 +99,7 @@ export default function InsightsPanel({
           <p className={microLabel}>Your biggest gaps</p>
           <div className="mt-2 flex flex-col gap-1.5">
             {data.gaps.length === 0 ? (
-              <p className="text-[12.5px] text-[#8a8371]">
+              <p className="text-[12.5px] text-[#5d574a]">
                 No repeated gaps yet — your evidence covers what these JDs ask
                 for.
               </p>
@@ -115,7 +115,7 @@ export default function InsightsPanel({
                   >
                     {agg.skill}
                   </Chip>
-                  <span className="shrink-0 text-[11.5px] text-[#8a8371]">
+                  <span className="shrink-0 text-[11.5px] text-[#5d574a]">
                     in {agg.totalJds}/{data.withSignals} JDs
                   </span>
                   <span className="ml-auto">
@@ -138,7 +138,7 @@ export default function InsightsPanel({
                 <span className="shrink-0 font-bold tabular-nums text-[13px]">
                   {d.avg}
                 </span>
-                <span className="shrink-0 text-[11.5px] text-[#8a8371]">
+                <span className="shrink-0 text-[11.5px] text-[#5d574a]">
                   avg · {d.count} assays
                 </span>
               </div>

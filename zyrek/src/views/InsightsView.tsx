@@ -16,7 +16,7 @@ export default function InsightsView({ items }: { items: SavedAssay[] }) {
 
       <section className="max-w-3xl pb-16">
         {data.withSignals < 3 ? (
-          <p className="text-[13.5px] text-[#8a8371]">
+          <p className="text-[13.5px] text-[#5d574a]">
             Not enough data yet — run a few more.
           </p>
         ) : (

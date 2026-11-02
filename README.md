@@ -19,10 +19,10 @@ Zyrek takes any job description and your one master resume, and produces a compl
 - Save your master resume once — paste it or upload a PDF/DOCX, with text extracted entirely in your browser.
 - Paste any job description.
 - One structured call to Gemini builds the full package — CV, cover letter, and form answers — and you can export the tailored CV or cover letter as a clean PDF via your browser's print dialog.
-- The package is scored 0–100 across five dimensions and reviewed by the three-person panel, then auto-saved — each run becomes a tracked application on the **Pipeline** page: set its status (Saved → Applied → Interview → Offer / Rejected), keep private notes on it, and watch your pipeline stats at a glance.
+- The package is scored 0–100 across five dimensions and reviewed by the three-person panel, then auto-saved — each run becomes a tracked application on the **Applications** page: set its status (Saved → Applied → Interview → Offer / Rejected), keep private notes on it, and watch your pipeline stats at a glance.
 - Across all saved runs, an Insights panel shows what the market keeps demanding and where your evidence is repeatedly weak — and after you improve your resume, one click re-runs any old JD to prove the score moved.
 - For any saved run, generate an interview prep pack: the questions this exact JD makes likely — including probes at your weak spots — with honest STAR answers drawn only from your real resume, plus a flashcard practice mode.
-- The Pipeline's follow-up radar flags applications gone silent (7 days after applying, 5 after an interview), drafts the polite nudge with your own AI key, and drops a reminder into your calendar as an .ics file.
+- The Applications page's follow-up radar flags applications gone silent (7 days after applying, 5 after an interview), drafts the polite nudge with your own AI key, and drops a reminder into your calendar as an .ics file.
 
 ## Privacy
 

@@ -13,12 +13,12 @@ function signed(n: number): string {
 export default function RerunDiff({ diff }: { diff: RerunDiff }) {
   const delta = diff.toScore - diff.fromScore
   const deltaColor =
-    delta > 0 ? 'text-[#3d5a2e]' : delta < 0 ? 'text-[#9c3d1e]' : 'text-[#8a8371]'
+    delta > 0 ? 'text-[#3d5a2e]' : delta < 0 ? 'text-[#9c3d1e]' : 'text-[#5d574a]'
 
   return (
     <div className={`${cardClass} rounded-lg px-4 py-2.5`}>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-        <span className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-[#8a8371]">
+        <span className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-[#6f6858]">
           Re-run
         </span>
         <span className="text-[13px] font-semibold tabular-nums">
@@ -28,7 +28,7 @@ export default function RerunDiff({ diff }: { diff: RerunDiff }) {
           ({signed(delta)})
         </span>
         {diff.dimensions.length === 0 ? (
-          <span className="text-[11.5px] text-[#8a8371]">
+          <span className="text-[11.5px] text-[#5d574a]">
             no dimension moved meaningfully
           </span>
         ) : (

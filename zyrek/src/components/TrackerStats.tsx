@@ -31,17 +31,17 @@ export default function TrackerStats({ items }: { items: SavedAssay[] }) {
             <div className="text-2xl font-bold tabular-nums">
               {t.n}
               {t.suffix && (
-                <span className="ml-0.5 text-[12px] font-normal text-[#8a8371]">
+                <span className="ml-0.5 text-[12px] font-normal text-[#5d574a]">
                   {t.suffix}
                 </span>
               )}
             </div>
-            <div className="text-[11.5px] text-[#8a8371]">{t.label}</div>
+            <div className="text-[11.5px] text-[#5d574a]">{t.label}</div>
           </div>
         ))}
       </div>
       {(offers > 0 || rejections > 0) && (
-        <p className="mt-3 text-[12px] text-[#8a8371]">
+        <p className="mt-3 text-[12px] text-[#5d574a]">
           {offers} offer{offers === 1 ? '' : 's'} · {rejections} rejected
         </p>
       )}

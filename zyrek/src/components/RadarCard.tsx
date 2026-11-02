@@ -39,7 +39,7 @@ export default function RadarCard({
     <div className={cardClass}>
       <div className="flex items-center justify-between gap-2 border-b border-[#e2dccb] px-5 py-4">
         <span className={microLabel}>Follow-up radar</span>
-        <span className="shrink-0 text-[12px] text-[#8a8371]">{nudges.length}</span>
+        <span className="shrink-0 text-[12px] text-[#5d574a]">{nudges.length}</span>
       </div>
 
       <div className="px-3 py-2">
@@ -62,7 +62,7 @@ export default function RadarCard({
                 </button>
                 <span
                   className={`shrink-0 text-[12px] ${
-                    n.daysSilent >= 14 ? 'text-[#8a5a1d]' : 'text-[#8a8371]'
+                    n.daysSilent >= 14 ? 'text-[#8a5a1d]' : 'text-[#5d574a]'
                   }`}
                 >
                   {reason(n)}
@@ -78,7 +78,7 @@ export default function RadarCard({
                   <button
                     type="button"
                     onClick={() => onDone(n.id)}
-                    className="text-[12px] text-[#8a8371] transition-colors hover:text-[#26221b]"
+                    className="text-[12px] text-[#5d574a] transition-colors hover:text-[#26221b]"
                   >
                     Done
                   </button>
@@ -87,7 +87,7 @@ export default function RadarCard({
                     onClick={() => assay && onIcs(assay)}
                     aria-label="Add reminder"
                     title="Add reminder (.ics)"
-                    className="flex min-h-[32px] items-center rounded-md p-1 text-[#8a8371] transition-colors hover:text-[#26221b]"
+                    className="flex min-h-[32px] items-center rounded-md p-1 text-[#5d574a] transition-colors hover:text-[#26221b]"
                   >
                     <CalendarPlus className="h-3.5 w-3.5" />
                   </button>

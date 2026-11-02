@@ -65,18 +65,13 @@ export default function AssayView({
 }: AssayViewProps) {
   return (
     <>
-      {/* HERO */}
-      <section className="max-w-2xl pt-14 pb-12">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#b3492b]">
-          The Interview Pipeline
-        </p>
-        <h1 className="mt-4 text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl">
-          Paste any job. Get a tailored, graded application.
+      {/* HEADING */}
+      <section className="max-w-2xl pt-12 pb-8">
+        <h1 className="text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl">
+          Grade a job before you apply
         </h1>
-        <p className="mt-5 text-[16px] leading-relaxed text-[#6f6858]">
-          Your CV, cover letter, and form answers — rewritten for that exact
-          role, then scored by a recruiter, a hiring manager, and a
-          fact-checker before you send.
+        <p className="mt-3 text-[15px] text-[#5d574a]">
+          Three steps. About 20 seconds.
         </p>
       </section>
 
@@ -127,7 +122,7 @@ export default function AssayView({
             <button
               type="button"
               onClick={() => navigate({ view: 'app', id: justRunAssay.id })}
-              className="-mt-3 self-start text-[12.5px] text-[#8a8371] transition-colors hover:text-[#26221b]"
+              className="-mt-3 self-start text-[12.5px] text-[#5d574a] transition-colors hover:text-[#26221b]"
             >
               View in pipeline →
             </button>
@@ -138,10 +133,10 @@ export default function AssayView({
           <div className="flex min-h-[420px] items-center justify-center rounded-xl border border-dashed border-[#cfc7b2] bg-[#faf7f0]/40 px-8">
             <div className="flex flex-col items-center gap-5">
               <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-[#e2dccb] border-t-[#26221b]" />
-              <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-[#8a8371]">
+              <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-[#5d574a]">
                 {loadingStage}
               </p>
-              <p className="text-[12.5px] text-[#8a8371]">
+              <p className="text-[12.5px] text-[#5d574a]">
                 One call, full package — no fabrication allowed.
               </p>
             </div>
@@ -169,7 +164,7 @@ export default function AssayView({
           <div className="flex min-h-[420px] items-center justify-center rounded-xl border border-dashed border-[#cfc7b2] bg-[#faf7f0]/40 px-8">
             <div className="flex max-w-sm flex-col items-center gap-4 text-center">
               <ShieldCheck className="h-8 w-8 text-[#b6ad97]" />
-              <p className="text-[14px] leading-relaxed text-[#8a8371]">
+              <p className="text-[14px] leading-relaxed text-[#5d574a]">
                 {hasAnyKey
                   ? 'Your graded package will appear here — match score, dimension breakdown, and the three-reviewer panel.'
                   : 'Add an API key first (Settings — top right) — Gemini, Groq, OpenAI, or Claude — then paste a job description and run your first Zyrek.'}

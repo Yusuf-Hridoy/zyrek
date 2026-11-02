@@ -69,14 +69,14 @@ export default function NotesCard({ assay, onSave }: NotesCardProps) {
         <span className={microLabel}>Notes</span>
         <span className="relative h-4 w-14 text-right">
           <span
-            className={`absolute inset-0 text-[11px] text-[#8a8371] transition-opacity ${
+            className={`absolute inset-0 text-[11px] text-[#5d574a] transition-opacity ${
               saveState === 'saving' ? 'opacity-100' : 'opacity-0'
             }`}
           >
             Saving…
           </span>
           <span
-            className={`absolute inset-0 text-[11px] text-[#8a8371] transition-opacity ${
+            className={`absolute inset-0 text-[11px] text-[#5d574a] transition-opacity ${
               saveState === 'saved' ? 'opacity-100' : 'opacity-0'
             }`}
           >

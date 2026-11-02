@@ -67,7 +67,7 @@ export default function FollowUpDraftPanel({
   return (
     <div className="border-t border-[#e2dccb] px-3 py-3">
       {phase === 'loading' && (
-        <p className="text-[12.5px] text-[#8a8371]">Drafting…</p>
+        <p className="text-[12.5px] text-[#5d574a]">Drafting…</p>
       )}
 
       {phase === 'error' && (
@@ -125,7 +125,7 @@ export default function FollowUpDraftPanel({
               type="button"
               onClick={generate}
               aria-label="Regenerate draft"
-              className="flex items-center gap-1 text-[12px] text-[#8a8371] transition-colors hover:text-[#26221b]"
+              className="flex items-center gap-1 text-[12px] text-[#5d574a] transition-colors hover:text-[#26221b]"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               Regenerate

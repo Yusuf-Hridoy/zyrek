@@ -285,11 +285,16 @@ export default function App() {
   const detailAssay =
     route.view === 'app' ? (history.find((h) => h.id === route.id) ?? null) : null
 
-  const tabs: { view: 'assay' | 'pipeline' | 'insights'; label: string }[] = [
-    { view: 'assay', label: 'Zyrek' },
+  const tabs: {
+    view: 'assay' | 'pipeline' | 'insights'
+    label: string
+    count?: number
+  }[] = [
+    { view: 'assay', label: 'New application' },
     {
       view: 'pipeline',
-      label: history.length > 0 ? `Pipeline · ${history.length}` : 'Pipeline',
+      label: 'Applications',
+      count: history.length > 0 ? history.length : undefined,
     },
     { view: 'insights', label: 'Insights' },
   ]
@@ -302,14 +307,14 @@ export default function App() {
           <div className="flex items-center gap-2.5">
             <div className="h-4 w-4 rounded-[4px] bg-[#26221b]" />
             <span className="text-lg font-bold tracking-tight">Zyrek</span>
-            <span className="ml-2 hidden font-mono text-[11px] uppercase tracking-[0.18em] text-[#8a8371] sm:inline">
+            <span className="ml-2 hidden font-mono text-[11px] uppercase tracking-[0.18em] text-[#6f6858] sm:inline">
               Personal · Private
             </span>
           </div>
 
           <nav
             aria-label="Primary"
-            className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto"
+            className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto max-sm:order-last max-sm:basis-full"
           >
             {tabs.map((t) => {
               const active =
@@ -319,19 +324,22 @@ export default function App() {
                   key={t.view}
                   type="button"
                   onClick={() => navigate({ view: t.view })}
-                  className={`shrink-0 whitespace-nowrap rounded-md px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors ${
+                  className={`flex min-h-[32px] shrink-0 items-center whitespace-nowrap rounded-md px-3 py-1 text-[12.5px] font-medium transition-colors ${
                     active
                       ? 'bg-[#26221b] text-[#f4f0e4]'
-                      : 'text-[#8a8371] hover:text-[#26221b]'
+                      : 'text-[#5d574a] hover:text-[#26221b]'
                   }`}
                 >
                   {t.label}
+                  {t.count !== undefined && (
+                    <span className="max-[420px]:hidden">&nbsp;· {t.count}</span>
+                  )}
                 </button>
               )
             })}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-2">
             <a
               href="#/settings"
               className="flex items-center gap-2 rounded-lg border border-[#d8d1bf] bg-[#faf7f0] px-3.5 py-2 text-[13px] font-medium text-[#26221b] transition-colors hover:bg-[#f2eee2]"

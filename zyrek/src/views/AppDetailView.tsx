@@ -91,7 +91,7 @@ export default function AppDetailView({
     return (
       <section className="max-w-3xl pt-10 pb-16">
         <BackLink />
-        <p className="mt-6 text-[14px] text-[#8a8371]">
+        <p className="mt-6 text-[14px] text-[#5d574a]">
           This application no longer exists.
         </p>
       </section>
@@ -171,7 +171,7 @@ export default function AppDetailView({
                       ? 'Save a master resume first'
                       : undefined
                   }
-                  className="flex items-center gap-1.5 rounded-md py-1 text-[12px] text-[#8a8371] transition-colors hover:text-[#26221b] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex items-center gap-1.5 rounded-md py-1 text-[12px] text-[#5d574a] transition-colors hover:text-[#26221b] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <RefreshCw className="h-3.5 w-3.5" />
                   Re-run with current resume
@@ -222,13 +222,13 @@ export default function AppDetailView({
                 <button
                   type="button"
                   onClick={() => setEditingContact(false)}
-                  className="shrink-0 text-[12px] text-[#8a8371] transition-colors hover:text-[#4a4436]"
+                  className="shrink-0 text-[12px] text-[#5d574a] transition-colors hover:text-[#4a4436]"
                 >
                   Cancel
                 </button>
               </div>
             ) : (
-              <div className="mt-3 flex items-center gap-2 text-[11.5px] text-[#8a8371]">
+              <div className="mt-3 flex items-center gap-2 text-[11.5px] text-[#5d574a]">
                 {contact ? (
                   <>
                     <span>
@@ -251,7 +251,7 @@ export default function AppDetailView({
                   <button
                     type="button"
                     onClick={startEditContact}
-                    className="text-[11.5px] text-[#8a8371] transition-colors hover:text-[#26221b]"
+                    className="text-[11.5px] text-[#5d574a] transition-colors hover:text-[#26221b]"
                   >
                     + Add contact
                   </button>
@@ -274,10 +274,10 @@ export default function AppDetailView({
           <div className="flex min-h-[420px] items-center justify-center rounded-xl border border-dashed border-[#cfc7b2] bg-[#faf7f0]/40 px-8">
             <div className="flex flex-col items-center gap-5">
               <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-[#e2dccb] border-t-[#26221b]" />
-              <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-[#8a8371]">
+              <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-[#5d574a]">
                 {loadingStage}
               </p>
-              <p className="text-[12.5px] text-[#8a8371]">
+              <p className="text-[12.5px] text-[#5d574a]">
                 One call, full package — no fabrication allowed.
               </p>
             </div>
@@ -316,7 +316,7 @@ function BackLink() {
     <button
       type="button"
       onClick={() => navigate({ view: 'pipeline' })}
-      className="flex items-center gap-1 text-[12.5px] text-[#8a8371] transition-colors hover:text-[#26221b]"
+      className="flex items-center gap-1 text-[12.5px] text-[#5d574a] transition-colors hover:text-[#26221b]"
     >
       <ArrowLeft className="h-3.5 w-3.5" />
       Pipeline

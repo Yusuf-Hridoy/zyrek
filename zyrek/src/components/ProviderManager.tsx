@@ -26,7 +26,7 @@ export function BackupControls() {
 
   return (
     <div className="mt-3 border-t border-[#e2dccb] pt-3">
-      <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#8a8371]">
+      <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#6f6858]">
         Backup
       </p>
       <div className="mt-2 flex items-center gap-3">
@@ -50,7 +50,7 @@ export function BackupControls() {
             <button
               type="button"
               onClick={() => setConfirming(false)}
-              className="text-[#8a8371] transition-colors hover:text-[#4a4436]"
+              className="text-[#5d574a] transition-colors hover:text-[#4a4436]"
             >
               Keep
             </button>
@@ -135,7 +135,7 @@ export function ProviderManagerContent({
   return (
     <div>
       <h3 className="text-[14px] font-semibold">AI providers</h3>
-      <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#8a8371]">
+      <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#5d574a]">
         Keys are stored only in this browser. Gemini and Groq keys are free;
         OpenAI and Claude are paid per use. If the active provider is
         rate-limited, Zyrek retries on another provider you've added.
@@ -175,7 +175,7 @@ export function ProviderManagerContent({
                   </span>
                 </button>
                 {hasKey ? (
-                  <span className="flex items-center gap-1.5 text-[12px] text-[#8a8371]">
+                  <span className="flex items-center gap-1.5 text-[12px] text-[#5d574a]">
                     <span className="h-1.5 w-1.5 rounded-full bg-[#5a8a3e]" />
                     key saved
                   </span>
@@ -220,7 +220,7 @@ export function ProviderManagerContent({
                 <button
                   type="button"
                   onClick={() => removeKey(id)}
-                  className="mt-1.5 text-[12px] text-[#8a8371] transition-colors hover:text-[#b3492b]"
+                  className="mt-1.5 text-[12px] text-[#5d574a] transition-colors hover:text-[#b3492b]"
                 >
                   Remove
                 </button>

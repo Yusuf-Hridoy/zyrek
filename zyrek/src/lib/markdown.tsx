@@ -165,7 +165,7 @@ export function renderMarkdown(
               className={
                 print
                   ? undefined
-                  : 'text-[13.5px] leading-relaxed text-[#26221b] marker:text-[#8a8371]'
+                  : 'text-[13.5px] leading-relaxed text-[#26221b] marker:text-[#6f6858]'
               }
             >
               {inline(item.text, `${key}-li${j}`, print)}
@@ -177,7 +177,7 @@ export function renderMarkdown(
                       className={
                         print
                           ? undefined
-                          : 'text-[13.5px] leading-relaxed text-[#26221b] marker:text-[#8a8371]'
+                          : 'text-[13.5px] leading-relaxed text-[#26221b] marker:text-[#6f6858]'
                       }
                     >
                       {inline(c, `${key}-li${j}-n${k}`, print)}

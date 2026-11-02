@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { ArrowRight } from 'lucide-react'
 import type { AssayResult } from '../types/assay'
 import { cardClass, microLabel } from '../lib/ui'
 
@@ -9,6 +10,13 @@ const VERDICT_STYLES: Record<AssayResult['verdict'], string> = {
   'GOOD MATCH': 'bg-[#e9efdc] text-[#5a6428] border-[#cdd6a8]',
   'PARTIAL MATCH': 'bg-[#f3e8d3] text-[#8a5a1d] border-[#e0c795]',
   'WEAK MATCH': 'bg-[#f3ddd3] text-[#9c3d1e] border-[#e3b39d]',
+}
+
+const DECISION_LINES: Record<AssayResult['verdict'], string> = {
+  'STRONG MATCH': 'Worth applying — send this package.',
+  'GOOD MATCH': 'Worth applying — read the reviewer notes first.',
+  'PARTIAL MATCH': 'Borderline — fix what you can, then decide.',
+  'WEAK MATCH': 'Weak match — your time is likely better spent elsewhere.',
 }
 
 export default function ScoreCard({ result }: { result: AssayResult }) {
@@ -54,6 +62,10 @@ export default function ScoreCard({ result }: { result: AssayResult }) {
                 /100
               </span>
             </div>
+            <p className="mt-2 flex items-start gap-1.5 text-[12.5px] leading-snug text-[#26221b] sm:max-w-[15rem]">
+              <ArrowRight className="mt-px h-3.5 w-3.5 shrink-0" />
+              {DECISION_LINES[result.verdict] ?? DECISION_LINES['PARTIAL MATCH']}
+            </p>
           </div>
           <p className="min-w-0 flex-1 pt-0 text-[15px] leading-relaxed text-[#4a4436] sm:pt-8">
             {result.summary}
@@ -86,7 +98,7 @@ export default function ScoreCard({ result }: { result: AssayResult }) {
                 </span>
               </div>
               {typeof d.note === 'string' && d.note.trim() !== '' && (
-                <p className="mt-0.5 text-[11.5px] leading-snug text-[#8a8371]">
+                <p className="mt-0.5 text-[11.5px] leading-snug text-[#5d574a]">
                   {d.note}
                 </p>
               )}

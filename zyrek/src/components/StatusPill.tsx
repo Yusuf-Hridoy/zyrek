@@ -82,7 +82,7 @@ export default function StatusPill({
               />
               <span className="flex-1">{STATUS_LABELS[s]}</span>
               {s === status && (
-                <Check className="h-3.5 w-3.5 shrink-0 text-[#8a8371]" />
+                <Check className="h-3.5 w-3.5 shrink-0 text-[#5d574a]" />
               )}
             </button>
           ))}

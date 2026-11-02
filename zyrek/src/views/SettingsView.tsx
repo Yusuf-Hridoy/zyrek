@@ -38,7 +38,7 @@ export default function SettingsView({
           <BackupControls />
         </div>
 
-        <p className="text-[12.5px] text-[#8a8371]">
+        <p className="text-[12.5px] text-[#5d574a]">
           Your resume and keys stay in this browser. Never uploaded anywhere
           else.
         </p>

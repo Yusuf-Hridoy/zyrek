@@ -59,7 +59,7 @@ State lives in **`src/App.tsx` only**. Views are layout shells that receive prop
 
 ## Design language (match exactly — the app must look like one hand built it)
 
-- Paper palette: page `#f4f0e4`; cards `bg-[#faf7f0] border-[#d8d1bf] rounded-xl` + soft double shadow (use `cardClass`); ink `#26221b`; muted `#8a8371` / `#6f6858`; dividers `#e2dccb`; hover fill `#f2eee2`; accent `#b3492b` — **rare** (links, delete-confirm, REJECTED family only).
+- Paper palette: page `#f4f0e4`; cards `bg-[#faf7f0] border-[#d8d1bf] rounded-xl` + soft double shadow (use `cardClass`); ink `#26221b`; muted `#5d574a` (supporting text) / `#6f6858` (micro-labels); `#8a8371` placeholder-only; dividers `#e2dccb`; hover fill `#f2eee2`; accent `#b3492b` — **rare** (links, delete-confirm, REJECTED family only).
 - Status/verdict families: green `#3d5a2e`/`#e3ecda`/`#b9cba6` · yellow-green `#5a6428`/`#e9efdc`/`#cdd6a8` · amber `#8a5a1d`/`#f3e8d3`/`#e0c795` · clay `#9c3d1e`/`#f3ddd3`/`#e3b39d` · neutral `#6f6858`/`#efe9d9`/`#ddd6c4`.
 - Radii system: `rounded-xl` cards, `rounded-lg` controls, `rounded-md` pills/chips. Nothing else.
 - Micro-labels: `microLabel` (`font-mono text-[11px] uppercase tracking-[0.18em]`).
@@ -69,6 +69,7 @@ State lives in **`src/App.tsx` only**. Views are layout shells that receive prop
 ## UX discipline (binding on every change)
 
 - The Zyrek page stays almost empty — nothing new ever lands there. Features live on Pipeline / AppDetail / Insights / Settings.
+- User-facing labels use plain everyday words (e.g. 'New application', 'Applications'), not product jargon.
 - Quiet empty states: a feature with no data renders NOTHING (no teaser, no locked state, no empty shell). The page with no data must look like the feature doesn't exist.
 - Zero layout shift from state changes; one accordion/dropdown open at a time; Escape and click-outside close popovers; keyed components (`key={assay.id}`) where per-assay state could bleed.
 - Mobile: everything must work at 380px width; touch targets ≥32px; no nested scroll boxes (the page scrolls; sticky bars are fine — remember `overflow-hidden` on an ancestor breaks `position: sticky`).
