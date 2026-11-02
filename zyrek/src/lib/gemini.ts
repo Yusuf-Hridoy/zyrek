@@ -14,14 +14,12 @@ Rules you must follow:
    (e) Projects: if the resume lists personal/side projects, include the 1–3 most JD-relevant as a Projects section with one line each.
    (f) Education and certifications as given.
    Length: concise — target roughly 400–600 words of content; never pad.
-3. The cover letter must follow this standard structure and stay under 350 words, in a human, specific tone. BANNED OPENERS — the letter must not begin with these or any equivalent stock-enthusiasm phrasing: 'I am writing to express my interest', 'I am writing to apply', 'I am excited to apply', 'I am thrilled', 'I was excited to see'. The opening leads with evidence or a concrete hook, never with a statement of emotion.
-   (a) Greeting: use the hiring manager's name only if the JD provides one; otherwise 'Dear Hiring Manager,' — never invent a name.
-   (b) Opening — one or two sentences hooking the candidate's strongest relevant qualification directly to THIS role and company.
-   (c) Current role — a paragraph anchored in the candidate's CURRENT or most recent position (identified from the resume by 'Present' or the latest end date). Name the employer and title explicitly and surface the most JD-relevant achievements from it. This paragraph is MANDATORY: a cover letter that does not name the current employer and role is invalid.
-   (d) Earlier experience — optionally one short paragraph, ONLY if an earlier role adds distinct, JD-relevant evidence the current role lacks. Frame it clearly as prior experience ('Previously at X...'), never as if it were current.
-   (e) Why this company — one or two sentences tying the candidate's direction to something concrete from the JD. If the company name is unknown, write naturally around 'your team' — never invent a company name.
-   (f) Close — brief, confident, simple call to action, sign-off with the candidate's name.
-   The letter must complement the CV, not recite it — pick 2–3 strongest points, don't enumerate everything. Recency rule: when equally relevant evidence exists in multiple roles, always prefer the most recent. All content remains bound by rule 1.
+3. COVER LETTER: 130–180 words, written fresh from THIS job description and the resume — never from a template. Address "Dear Hiring Team," unless the JD names a person. Structure:
+   (a) OPENER: the first sentence states one concrete, verifiable fact from the resume — preferably an action in the candidate's CURRENT role — chosen because it matches the JD's single most important requirement. BANNED opener styles, in any wording: generic excitement ("I am excited to apply...", "I am writing to express...", "I came across your posting..."); abstract thesis claims (any opener about what quality/success/X "requires", "demands", or "depends on" in general, e.g. "Delivering reliable software requires..."); casual persona lines ("I do X for a living", "X is my passion", "As a passionate...").
+   (b) CURRENT ROLE: one short paragraph on what the candidate does now, employer named, selecting only details relevant to this JD.
+   (c) CONNECT: one explicit sentence linking the background to THIS role — why the overlap between the JD's top needs and the candidate's strongest matching proof makes it a fit. Earlier roles may support this in past tense, at most one sentence each.
+   (d) CLOSER: one sentence offering something concrete (what the candidate would discuss, show, or tackle first). BANNED closers in any wording: "Thank you for your time and consideration", "I am eager to contribute", "I look forward to hearing from you".
+   STYLE: plain everyday English, short sentences, active voice, no corporate filler. Restate at most TWO facts that also appear in the tailored CV — the letter must add connection and judgment, not repeat the CV. Sign off "Best regards," + candidate name.
 4. Form answers: anticipate the 3 most likely application-form / screening questions for this exact role (not logistics like notice period — pick substantive ones like 'describe a project where...') and answer them from the resume's evidence.
 5. Grade across exactly these 5 dimensions (0–100 each): 'Requirements match', 'Evidence strength', 'Domain familiarity', 'Seniority and scope', 'Keyword / ATS alignment'. Every dimension MUST include a one-sentence note justifying its score. Calibrate scores against these anchors, consistently across runs:
    85–100 = a screener would fast-track this candidate; requirement coverage is near-complete with strong evidence.
@@ -127,12 +125,14 @@ const RESPONSE_SCHEMA = {
 
 export async function assayApplication(
   apiKey: string,
+  model: string,
   resume: string,
   jobDescription: string,
 ): Promise<AssayResult> {
   const attempt = async (): Promise<string> => {
     const res = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=' +
+      'https://generativelanguage.googleapis.com/v1beta/models/' +
+        `${encodeURIComponent(model)}:generateContent?key=` +
         encodeURIComponent(apiKey),
       {
         method: 'POST',
@@ -172,6 +172,11 @@ export async function assayApplication(
       }
       if (res.status === 429) {
         throw new RateLimitError('gemini', 'Gemini')
+      }
+      if (res.status === 404) {
+        throw new Error(
+          `Model "${model}" was not found on Gemini — the provider may have renamed or retired it. Change the model in Settings.`,
+        )
       }
       if (res.status >= 500) {
         const serverError = new Error(message) as Error & { retryable?: boolean }

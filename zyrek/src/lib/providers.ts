@@ -158,3 +158,43 @@ export function loadActiveProvider(
 export function saveActiveProvider(id: ProviderId): void {
   localStorage.setItem(ACTIVE_KEY, id)
 }
+
+const MODELS_KEY = 'zyrek.models'
+
+/** Per-provider model overrides; malformed or missing storage reads as empty. */
+function loadModelOverrides(): Partial<Record<ProviderId, string>> {
+  try {
+    const raw = localStorage.getItem(MODELS_KEY)
+    if (raw === null) return {}
+    const parsed: unknown = JSON.parse(raw)
+    if (typeof parsed !== 'object' || parsed === null) return {}
+    const record = parsed as Record<string, unknown>
+    const models: Partial<Record<ProviderId, string>> = {}
+    for (const id of PROVIDER_ORDER) {
+      const v = record[id]
+      if (typeof v === 'string' && v.trim()) models[id] = v.trim()
+    }
+    return models
+  } catch {
+    return {}
+  }
+}
+
+/** The model a provider call should use: the saved override, else the built-in default. */
+export function getModel(id: ProviderId): string {
+  return loadModelOverrides()[id] ?? PROVIDERS[id].model
+}
+
+/** Trims the model; an empty or null model removes the override. */
+export function setModelOverride(id: ProviderId, model: string | null): void {
+  const next = loadModelOverrides()
+  const trimmed = (model ?? '').trim()
+  if (trimmed) next[id] = trimmed
+  else delete next[id]
+  try {
+    if (Object.keys(next).length === 0) localStorage.removeItem(MODELS_KEY)
+    else localStorage.setItem(MODELS_KEY, JSON.stringify(next))
+  } catch {
+    // storage full or unavailable — getModel keeps returning the stored truth
+  }
+}

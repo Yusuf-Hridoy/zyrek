@@ -1,7 +1,7 @@
 /**
  * Backup / restore of all Zyrek local data.
  *
- * The four known localStorage keys are copied as RAW stored strings in both
+ * The known localStorage keys are copied as RAW stored strings in both
  * directions — never re-parsed or re-serialized — so a restore is byte-exact
  * and cannot drift in shape.
  */
@@ -11,6 +11,7 @@ const BACKUP_KEYS = [
   'zyrek.keys',
   'zyrek.provider',
   'zyrek.masterResume',
+  'zyrek.models',
 ] as const
 
 export function exportBackup(): void {

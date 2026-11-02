@@ -3,6 +3,7 @@ import { anthropicJson } from './anthropic'
 import { assayApplication, SYSTEM_PROMPT } from './gemini'
 import { JSON_SHAPE_ADDENDUM, openaiCompatAssay } from './openaiCompat'
 import {
+  getModel,
   PROVIDERS,
   PROVIDER_ORDER,
   RateLimitError,
@@ -30,13 +31,13 @@ export async function runAssay(
     const key = keys[id]!
     const info = PROVIDERS[id]
     if (info.kind === 'gemini') {
-      return assayApplication(key, resume, jd)
+      return assayApplication(key, getModel(id), resume, jd)
     }
     if (info.kind === 'anthropic') {
       const system = SYSTEM_PROMPT + '\n\n' + JSON_SHAPE_ADDENDUM
       const user =
         'MASTER RESUME:\n' + resume + '\n\n---\n\nJOB DESCRIPTION:\n' + jd
-      return anthropicJson(key, info.model, system, user).then(validateAssayResult)
+      return anthropicJson(key, getModel(id), system, user).then(validateAssayResult)
     }
     return openaiCompatAssay(info, key, resume, jd)
   }

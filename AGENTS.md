@@ -53,7 +53,7 @@ State lives in **`src/App.tsx` only**. Views are layout shells that receive prop
 
 ## Rules that protect user data
 
-- localStorage keys: `zyrek.history`, `zyrek.keys`, `zyrek.provider`, `zyrek.masterResume`. **Never rename a key or change a stored shape without an explicit migration instruction in a brief.** New fields on `SavedAssay` are optional with read-time migration — never a rewrite pass over stored data. (Pre-rename `assay.*` keys from before the Argus→Zyrek rename are read-time migrated: first read copies the value to the new key, old keys left in place as a safety net; backups exported under the old names still import.)
+- localStorage keys: `zyrek.history`, `zyrek.keys`, `zyrek.provider`, `zyrek.masterResume`, `zyrek.models` (per-provider model overrides, read via `getModel`). **Never rename a key or change a stored shape without an explicit migration instruction in a brief.** New fields on `SavedAssay` are optional with read-time migration — never a rewrite pass over stored data. (Pre-rename `assay.*` keys from before the Argus→Zyrek rename are read-time migrated: first read copies the value to the new key, old keys left in place as a safety net; backups exported under the old names still import.)
 - `backup.ts` copies raw stored strings verbatim — keep it that way.
 - API keys never leave the browser except inside the direct provider request.
 

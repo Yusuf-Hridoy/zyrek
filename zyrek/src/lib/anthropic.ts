@@ -40,7 +40,7 @@ export async function anthropicJson(
     }
     if (res.status === 404) {
       throw new Error(
-        `Model "${model}" was not found on Claude — the provider may have retired it. Update the model id in src/lib/providers.ts.`,
+        `Model "${model}" was not found on Claude — the provider may have renamed or retired it. Change the model in Settings.`,
       )
     }
     throw new Error(message)

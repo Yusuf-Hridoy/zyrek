@@ -7,6 +7,7 @@ import type {
 import { anthropicJson } from './anthropic'
 import { extractJson } from './openaiCompat'
 import {
+  getModel,
   PROVIDERS,
   PROVIDER_ORDER,
   RateLimitError,
@@ -81,7 +82,7 @@ async function prepGemini(
 ): Promise<InterviewPrep> {
   const res = await fetch(
     'https://generativelanguage.googleapis.com/v1beta/models/' +
-      `${PROVIDERS.gemini.model}:generateContent?key=` +
+      `${encodeURIComponent(getModel('gemini'))}:generateContent?key=` +
       encodeURIComponent(apiKey),
     {
       method: 'POST',
@@ -112,6 +113,11 @@ async function prepGemini(
     if (res.status === 429) {
       throw new RateLimitError('gemini', 'Gemini')
     }
+    if (res.status === 404) {
+      throw new Error(
+        `Model "${getModel('gemini')}" was not found on Gemini — the provider may have renamed or retired it. Change the model in Settings.`,
+      )
+    }
     throw new Error(message)
   }
 
@@ -130,6 +136,7 @@ async function prepOpenAi(
   resume: string,
 ): Promise<InterviewPrep> {
   const info = PROVIDERS[id]
+  const model = getModel(id)
   const res = await fetch(`${info.baseUrl}/chat/completions`, {
     method: 'POST',
     headers: {
@@ -137,7 +144,7 @@ async function prepOpenAi(
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: info.model,
+      model,
       // GPT-5.x rejects a non-default temperature with a 400
       ...(info.id === 'openai' ? {} : { temperature: 0.5 }),
       response_format: { type: 'json_object' },
@@ -169,7 +176,7 @@ async function prepOpenAi(
     }
     if (res.status === 404) {
       throw new Error(
-        `Model "${info.model}" was not found on ${info.label} — the provider may have retired it. Update the model id in src/lib/providers.ts.`,
+        `Model "${model}" was not found on ${info.label} — the provider may have renamed or retired it. Change the model in Settings.`,
       )
     }
     throw new Error(message)
@@ -248,7 +255,7 @@ export async function runPrep(
     }
     if (info.kind === 'anthropic') {
       const system = PREP_SYSTEM_PROMPT + '\n\n' + PREP_ADDENDUM
-      return anthropicJson(key, info.model, system, buildUserContent(assay, resume)).then(
+      return anthropicJson(key, getModel(id), system, buildUserContent(assay, resume)).then(
         validatePrep,
       )
     }

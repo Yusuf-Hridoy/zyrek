@@ -307,9 +307,6 @@ export default function App() {
           <div className="flex items-center gap-2.5">
             <div className="h-4 w-4 rounded-[4px] bg-[#26221b]" />
             <span className="text-lg font-bold tracking-tight">Zyrek</span>
-            <span className="ml-2 hidden font-mono text-[11px] uppercase tracking-[0.18em] text-[#6f6858] sm:inline">
-              Personal · Private
-            </span>
           </div>
 
           <nav

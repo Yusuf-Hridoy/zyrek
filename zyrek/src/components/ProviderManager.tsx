@@ -1,11 +1,14 @@
 import { useRef, useState } from 'react'
 import {
+  getModel,
   PROVIDER_ORDER,
   PROVIDERS,
   saveActiveProvider,
+  setModelOverride,
   type ProviderId,
 } from '../lib/providers'
 import { exportBackup, importBackup } from '../lib/backup'
+import { microLabel } from '../lib/ui'
 
 /** Backup export/import controls — rendered on the Settings page. */
 export function BackupControls() {
@@ -93,6 +96,15 @@ interface ProviderManagerProps {
 const inputClass =
   'w-full rounded-lg border border-[#e2dccb] bg-[#f2eee2]/50 px-3.5 py-2.5 font-mono text-[13px] text-[#26221b] placeholder:text-[#a39b86] focus:border-[#b3492b]/40 focus:outline-none'
 
+const modelInputClass =
+  'w-full rounded-lg border border-[#e2dccb] bg-[#fdfcf8] px-3.5 py-2.5 font-mono text-[13px] text-[#26221b] placeholder:text-[#a39b86] focus:border-[#b3492b]/40 focus:outline-none'
+
+const effectiveModels = () =>
+  Object.fromEntries(PROVIDER_ORDER.map((id) => [id, getModel(id)])) as Record<
+    ProviderId,
+    string
+  >
+
 export function ProviderManagerContent({
   keys,
   activeProvider,
@@ -100,6 +112,22 @@ export function ProviderManagerContent({
   onActiveChange,
 }: ProviderManagerProps) {
   const [drafts, setDrafts] = useState<Partial<Record<ProviderId, string>>>({})
+  const [models, setModels] = useState(effectiveModels)
+  const [modelDrafts, setModelDrafts] = useState<Partial<Record<ProviderId, string>>>(
+    {},
+  )
+
+  // Saving the default or an empty string clears the override.
+  const saveModel = (id: ProviderId, value: string | null) => {
+    const trimmed = (value ?? '').trim()
+    setModelOverride(id, trimmed === PROVIDERS[id].model ? null : trimmed)
+    setModels(effectiveModels())
+    setModelDrafts((d) => {
+      const next = { ...d }
+      delete next[id]
+      return next
+    })
+  }
 
   const saveKey = (id: ProviderId) => {
     const key = (drafts[id] ?? '').trim()
@@ -224,6 +252,40 @@ export function ProviderManagerContent({
                 >
                   Remove
                 </button>
+              )}
+
+              <div className="mt-3 flex min-h-[20px] items-center justify-between gap-2">
+                <span className={microLabel}>Model</span>
+                {models[id] !== info.model && (
+                  <button
+                    type="button"
+                    onClick={() => saveModel(id, null)}
+                    className="text-[11.5px] text-[#b3492b] transition-colors hover:underline"
+                  >
+                    Reset to default
+                  </button>
+                )}
+              </div>
+              <input
+                type="text"
+                aria-label={`${info.label} model`}
+                spellCheck={false}
+                autoComplete="off"
+                value={modelDrafts[id] ?? models[id]}
+                onChange={(e) =>
+                  setModelDrafts((d) => ({ ...d, [id]: e.target.value }))
+                }
+                onBlur={() => {
+                  if (modelDrafts[id] !== undefined) saveModel(id, modelDrafts[id])
+                }}
+                onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
+                className={`mt-1.5 ${modelInputClass}`}
+              />
+              {id === 'gemini' && (
+                <p className="mt-1.5 text-[12px] text-[#5d574a]">
+                  Getting busy errors? Try gemini-3.5-flash-lite — lighter and
+                  rarely overloaded.
+                </p>
               )}
             </div>
           )

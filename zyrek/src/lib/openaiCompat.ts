@@ -1,6 +1,6 @@
 import type { AssayResult } from '../types/assay'
 import { SYSTEM_PROMPT } from './gemini'
-import { RateLimitError, type ProviderInfo } from './providers'
+import { getModel, RateLimitError, type ProviderInfo } from './providers'
 import { validateAssayResult } from './validate'
 
 export const JSON_SHAPE_ADDENDUM = `Respond with ONLY a single JSON object, no markdown fences, no commentary, matching exactly this shape:
@@ -44,6 +44,7 @@ export async function openaiCompatAssay(
   resume: string,
   jobDescription: string,
 ): Promise<AssayResult> {
+  const model = getModel(info.id)
   const res = await fetch(`${info.baseUrl}/chat/completions`, {
     method: 'POST',
     headers: {
@@ -51,7 +52,7 @@ export async function openaiCompatAssay(
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: info.model,
+      model,
       // GPT-5.x rejects a non-default temperature with a 400
       ...(info.id === 'openai' ? {} : { temperature: 0.4 }),
       response_format: { type: 'json_object' },
@@ -87,7 +88,7 @@ export async function openaiCompatAssay(
     }
     if (res.status === 404) {
       throw new Error(
-        `Model "${info.model}" was not found on ${info.label} — the provider may have retired it. Update the model id in src/lib/providers.ts.`,
+        `Model "${model}" was not found on ${info.label} — the provider may have renamed or retired it. Change the model in Settings.`,
       )
     }
     throw new Error(message)

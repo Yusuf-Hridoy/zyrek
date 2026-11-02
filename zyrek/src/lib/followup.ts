@@ -1,6 +1,7 @@
 import { anthropicJson } from './anthropic'
 import { extractJson } from './openaiCompat'
 import {
+  getModel,
   PROVIDERS,
   PROVIDER_ORDER,
   RateLimitError,
@@ -83,7 +84,7 @@ async function followUpGemini(
 ): Promise<FollowUpDraft> {
   const res = await fetch(
     'https://generativelanguage.googleapis.com/v1beta/models/' +
-      `${PROVIDERS.gemini.model}:generateContent?key=` +
+      `${encodeURIComponent(getModel('gemini'))}:generateContent?key=` +
       encodeURIComponent(apiKey),
     {
       method: 'POST',
@@ -114,6 +115,11 @@ async function followUpGemini(
     if (res.status === 429) {
       throw new RateLimitError('gemini', 'Gemini')
     }
+    if (res.status === 404) {
+      throw new Error(
+        `Model "${getModel('gemini')}" was not found on Gemini — the provider may have renamed or retired it. Change the model in Settings.`,
+      )
+    }
     throw new Error(message)
   }
 
@@ -131,6 +137,7 @@ async function followUpOpenAi(
   user: string,
 ): Promise<FollowUpDraft> {
   const info = PROVIDERS[id]
+  const model = getModel(id)
   const res = await fetch(`${info.baseUrl}/chat/completions`, {
     method: 'POST',
     headers: {
@@ -138,7 +145,7 @@ async function followUpOpenAi(
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: info.model,
+      model,
       // GPT-5.x rejects a non-default temperature with a 400
       ...(info.id === 'openai' ? {} : { temperature: 0.6 }),
       response_format: { type: 'json_object' },
@@ -167,7 +174,7 @@ async function followUpOpenAi(
     }
     if (res.status === 404) {
       throw new Error(
-        `Model "${info.model}" was not found on ${info.label} — the provider may have retired it. Update the model id in src/lib/providers.ts.`,
+        `Model "${model}" was not found on ${info.label} — the provider may have renamed or retired it. Change the model in Settings.`,
       )
     }
     throw new Error(message)
@@ -202,7 +209,7 @@ export async function runFollowUp(
       return followUpGemini(key, user)
     }
     if (info.kind === 'anthropic') {
-      return anthropicJson(key, info.model, FOLLOWUP_SYSTEM_PROMPT, user).then(
+      return anthropicJson(key, getModel(id), FOLLOWUP_SYSTEM_PROMPT, user).then(
         validateDraft,
       )
     }
