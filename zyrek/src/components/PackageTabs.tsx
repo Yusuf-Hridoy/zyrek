@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react'
-import { Copy, Check, Download, Printer } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { Copy, Check, Download, Printer, RefreshCw } from 'lucide-react'
 import type { AssayResult } from '../types/assay'
 import { cardClass } from '../lib/ui'
 import { renderMarkdown } from '../lib/markdown'
@@ -58,16 +58,42 @@ function slug(s: string): string {
 export default function PackageTabs({
   result,
   onExportPdf,
+  onRewriteLetter,
 }: {
   result: AssayResult
   onExportPdf?: (which: 'cv' | 'letter', result: AssayResult) => void
+  onRewriteLetter?: () => Promise<void>
 }) {
   const [tab, setTab] = useState<Tab>('cv')
   const [copied, setCopied] = useState(false)
+  const [confirmRewrite, setConfirmRewrite] = useState(false)
+  const [rewriting, setRewriting] = useState(false)
+  const [rewriteError, setRewriteError] = useState<string | null>(null)
   const barRef = useRef<HTMLDivElement>(null)
+
+  // Escape backs out of the confirm without touching anything.
+  useEffect(() => {
+    if (!confirmRewrite) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setConfirmRewrite(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [confirmRewrite])
+
+  const rewrite = () => {
+    if (!onRewriteLetter) return
+    setConfirmRewrite(false)
+    setRewriting(true)
+    setRewriteError(null)
+    onRewriteLetter()
+      .catch((e) => setRewriteError(e instanceof Error ? e.message : String(e)))
+      .finally(() => setRewriting(false))
+  }
 
   const onTabClick = (id: Tab) => {
     setTab(id)
+    setConfirmRewrite(false)
     // If the user scrolled deep into the content, bring the tab bar back —
     // otherwise leave the scroll position alone (no jumping near the top).
     if (barRef.current && barRef.current.getBoundingClientRect().top < 0) {
@@ -127,7 +153,40 @@ export default function PackageTabs({
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {tab === 'letter' &&
+            onRewriteLetter &&
+            (confirmRewrite ? (
+              <div className="flex items-center gap-2">
+                <span className="text-[12px] text-[#6f6858]">
+                  Replace this letter?
+                </span>
+                <button
+                  type="button"
+                  onClick={rewrite}
+                  className="text-[12px] font-semibold text-[#b3492b] transition-colors hover:underline"
+                >
+                  Confirm
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmRewrite(false)}
+                  className="text-[12px] text-[#5d574a] transition-colors hover:text-[#4a4436]"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setConfirmRewrite(true)}
+                disabled={rewriting}
+                className={`${actionClass} disabled:cursor-not-allowed disabled:opacity-40`}
+              >
+                <RefreshCw className="h-3.5 w-3.5" />
+                {rewriting ? 'Rewriting…' : 'Rewrite'}
+              </button>
+            ))}
           <button type="button" onClick={onCopy} className={actionClass}>
             {copied ? (
               <>
@@ -157,6 +216,19 @@ export default function PackageTabs({
           </button>
         </div>
       </div>
+
+      {tab === 'letter' && rewriteError && (
+        <div className="mx-6 mt-4 flex items-center justify-between gap-2 rounded-lg border border-[#e3b39d] bg-[#f7e8e0] px-4 py-3 text-[12.5px] text-[#8a3418]">
+          <span className="min-w-0">{rewriteError}</span>
+          <button
+            type="button"
+            onClick={rewrite}
+            className="shrink-0 text-[12px] font-semibold text-[#8a3418] underline underline-offset-2"
+          >
+            Try again
+          </button>
+        </div>
+      )}
 
       {/* CONTENT AREA — flows with the page; no inner scroll box */}
       <div className="px-6 py-5">

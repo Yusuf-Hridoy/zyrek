@@ -36,6 +36,7 @@ interface AssayViewProps {
   onPrepSaved: (id: string, prep: InterviewPrep) => void
   onNotesSave: (id: string, notes: string) => void
   onExportPdf: (which: 'cv' | 'letter', result: AssayResult) => void
+  onRewriteLetter: (assay: SavedAssay) => Promise<void>
 }
 
 export default function AssayView({
@@ -62,6 +63,7 @@ export default function AssayView({
   onPrepSaved,
   onNotesSave,
   onExportPdf,
+  onRewriteLetter,
 }: AssayViewProps) {
   return (
     <>
@@ -145,7 +147,12 @@ export default function AssayView({
           <>
             <ScoreCard result={result} />
             <IntegrityWarning result={result} masterResume={resume} />
-            <PackageTabs result={result} onExportPdf={onExportPdf} />
+            <PackageTabs
+              key={`tabs-${justRunAssay.id}`}
+              result={result}
+              onExportPdf={onExportPdf}
+              onRewriteLetter={() => onRewriteLetter(justRunAssay)}
+            />
             <PrepCard
               key={justRunAssay.id}
               assay={justRunAssay}

@@ -156,7 +156,7 @@ export function saveAssay(
 
 export function updateAssay(
   id: string,
-  patch: Partial<Pick<SavedAssay, 'status' | 'notes' | 'prep' | 'contact'>>,
+  patch: Partial<Pick<SavedAssay, 'status' | 'notes' | 'prep' | 'contact' | 'result'>>,
 ): SavedAssay | undefined {
   const list = read()
   const index = list.findIndex((e) => e.id === id)

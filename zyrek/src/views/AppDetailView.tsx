@@ -41,6 +41,7 @@ interface AppDetailViewProps {
   onNotesSave: (id: string, notes: string) => void
   draftFor: (assay: SavedAssay) => Promise<FollowUpOutcome>
   onExportPdf: (which: 'cv' | 'letter', result: AssayResult) => void
+  onRewriteLetter: (assay: SavedAssay) => Promise<void>
 }
 
 function relativeDate(ts: number): string {
@@ -70,6 +71,7 @@ export default function AppDetailView({
   onNotesSave,
   draftFor,
   onExportPdf,
+  onRewriteLetter,
 }: AppDetailViewProps) {
   const [now] = useState(() => Date.now())
   const [draftOpen, setDraftOpen] = useState(false)
@@ -290,7 +292,12 @@ export default function AppDetailView({
               masterResume={resume}
               savedAssay
             />
-            <PackageTabs result={assay.result} onExportPdf={onExportPdf} />
+            <PackageTabs
+              key={`tabs-${assay.id}`}
+              result={assay.result}
+              onExportPdf={onExportPdf}
+              onRewriteLetter={() => onRewriteLetter(assay)}
+            />
             <PrepCard
               key={assay.id}
               assay={assay}

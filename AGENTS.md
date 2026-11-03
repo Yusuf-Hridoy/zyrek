@@ -37,7 +37,7 @@ State lives in **`src/App.tsx` only**. Views are layout shells that receive prop
 - `gemini.ts` — shared `SYSTEM_PROMPT` (numbered rules 1–14) + Gemini structured-output call
 - `openaiCompat.ts` — Groq/OpenAI caller (`response_format: json_object`; **omit `temperature` for OpenAI** — GPT-5.x rejects it) + exported `extractJson` hardening (fence strip → first `{` to last `}` → parse)
 - `anthropic.ts` — native Messages API; requires headers `anthropic-version` and `anthropic-dangerous-direct-browser-access: true` and a `max_tokens`; no JSON mode, so output goes through `extractJson`
-- `runAssay.ts` / `prep.ts` / `followup.ts` — dispatch by provider kind + ONE-shot failover to the next provider with a saved key on `RateLimitError` only (never on invalid keys or 4xx)
+- `runAssay.ts` / `prep.ts` / `followup.ts` / `rewriteLetter.ts` (letter-only plain-text call, no JSON mode) — dispatch by provider kind + ONE-shot failover to the next provider with a saved key on `RateLimitError` only (never on invalid keys or 4xx)
 - `storage.ts` — `SavedAssay` shape, `zyrek.history` (newest first, cap 50, read-time migration for missing fields, QuotaExceeded evict-half-and-retry)
 - `validate.ts` — repair-first validators (clamp, fallback, synthesize; throw only when unusable) + `unescapeArtifacts`
 - `radar.ts` / `insights.ts` — pure functions, no React, no `Date.now()` inside (timestamps passed in)

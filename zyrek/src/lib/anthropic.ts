@@ -1,12 +1,13 @@
 import { RateLimitError } from './providers'
 import { extractJson } from './openaiCompat'
 
-export async function anthropicJson(
+/** One Messages API call; returns the reply's text block. */
+export async function anthropicText(
   apiKey: string,
   model: string,
   system: string,
   user: string,
-): Promise<unknown> {
+): Promise<string> {
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -53,5 +54,14 @@ export async function anthropicJson(
   if (!text) {
     throw new Error('The model returned an empty response. Try again.')
   }
-  return extractJson(text)
+  return text
+}
+
+export async function anthropicJson(
+  apiKey: string,
+  model: string,
+  system: string,
+  user: string,
+): Promise<unknown> {
+  return extractJson(await anthropicText(apiKey, model, system, user))
 }

@@ -25,6 +25,7 @@ import {
   type SavedAssay,
 } from './lib/storage'
 import { runFollowUp } from './lib/followup'
+import { rewriteLetter } from './lib/rewriteLetter'
 import { downloadFollowUpIcs } from './lib/ics'
 import { printDocument, type PrintDocData } from './lib/print'
 import PrintDoc from './components/PrintDoc'
@@ -241,6 +242,26 @@ export default function App() {
     setHistory(listAssays())
   }
 
+  // Explicit user action only — replaces the letter in place, never keeps the old one.
+  const handleRewriteLetter = async (assay: SavedAssay) => {
+    if (resume.trim().length < 100) {
+      throw new Error('Save a master resume first, then rewrite the letter.')
+    }
+    const coverLetter = await rewriteLetter(
+      activeProvider,
+      keys,
+      assay.jd,
+      resume,
+      assay.result.roleTitle,
+      assay.result.company,
+    )
+    updateAssay(assay.id, { result: { ...assay.result, coverLetter } })
+    setHistory(listAssays())
+    if (assay.id === activeId) {
+      setResult((r) => (r ? { ...r, coverLetter } : r))
+    }
+  }
+
   const draftFollowUp = (assay: SavedAssay) =>
     runFollowUp(activeProvider, keys, assay, resume, Date.now())
 
@@ -390,6 +411,7 @@ export default function App() {
             onPrepSaved={handlePrepSaved}
             onNotesSave={handleNotesChange}
             onExportPdf={handleExportPdf}
+            onRewriteLetter={handleRewriteLetter}
           />
         )}
         {route.view === 'pipeline' && (
@@ -420,6 +442,7 @@ export default function App() {
             onNotesSave={handleNotesChange}
             draftFor={draftFollowUp}
             onExportPdf={handleExportPdf}
+            onRewriteLetter={handleRewriteLetter}
           />
         )}
         {route.view === 'insights' && <InsightsView items={history} />}
