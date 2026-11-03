@@ -3,6 +3,7 @@ import { Copy, Check, Download, Printer, RefreshCw } from 'lucide-react'
 import type { AssayResult } from '../types/assay'
 import { cardClass } from '../lib/ui'
 import { renderMarkdown } from '../lib/markdown'
+import { formatCoverLetter } from '../lib/letterFormat'
 
 type Tab = 'cv' | 'letter' | 'answers'
 
@@ -34,7 +35,7 @@ function bundleMarkdown(result: AssayResult) {
     '',
     '## Cover letter',
     '',
-    result.coverLetter,
+    formatCoverLetter(result),
     '',
     '---',
     '',
@@ -101,9 +102,12 @@ export default function PackageTabs({
     }
   }
 
+  // Display-time frame only — the stored letter stays the raw AI text.
+  const letter = formatCoverLetter(result)
+
   const currentText = () => {
     if (tab === 'cv') return result.tailoredCv
-    if (tab === 'letter') return result.coverLetter
+    if (tab === 'letter') return letter
     return formatAnswers(result)
   }
 
@@ -203,7 +207,12 @@ export default function PackageTabs({
           {tab !== 'answers' && onExportPdf && (
             <button
               type="button"
-              onClick={() => onExportPdf(tab, result)}
+              onClick={() =>
+                onExportPdf(
+                  tab,
+                  tab === 'letter' ? { ...result, coverLetter: letter } : result,
+                )
+              }
               className={actionClass}
             >
               <Printer className="h-3.5 w-3.5" />
@@ -249,7 +258,7 @@ export default function PackageTabs({
         ) : tab === 'cv' ? (
           <div>{renderMarkdown(result.tailoredCv)}</div>
         ) : (
-          <div>{renderMarkdown(result.coverLetter)}</div>
+          <div>{renderMarkdown(letter)}</div>
         )}
       </div>
     </div>

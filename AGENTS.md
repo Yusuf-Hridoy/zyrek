@@ -42,7 +42,7 @@ State lives in **`src/App.tsx` only**. Views are layout shells that receive prop
 - `validate.ts` — repair-first validators (clamp, fallback, synthesize; throw only when unusable) + `unescapeArtifacts`
 - `radar.ts` / `insights.ts` — pure functions, no React, no `Date.now()` inside (timestamps passed in)
 - `markdown.tsx` — safe markdown → React elements (never `dangerouslySetInnerHTML`), screen + print variants
-- `router.ts`, `backup.ts`, `ics.ts`, `print.ts`, `stuffingCheck.ts` (pure gap-discipline verifier: flags CV skills with no resume evidence), `ui.ts` (shared `cardClass`, `microLabel`, `STATUS_STYLES`, slug helper), `extractResume.ts`
+- `router.ts`, `backup.ts`, `ics.ts`, `print.ts`, `stuffingCheck.ts` (pure gap-discipline verifier: flags CV skills with no resume evidence), `ui.ts` (shared `cardClass`, `microLabel`, `STATUS_STYLES`, slug helper), `extractResume.ts`, `letterFormat.ts` (pure display-time cover-letter frame — header, day-first date, recipient, greeting, sign-off; never persisted)
 
 ## Rules that protect the AI layer
 

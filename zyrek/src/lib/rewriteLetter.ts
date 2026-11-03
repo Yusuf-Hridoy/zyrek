@@ -19,7 +19,9 @@ STRUCTURE — exactly three short paragraphs, blank line between them, 140–200
 
 BANNED in any wording: "I am excited to apply", "I am writing to express", "I came across your posting"; abstract thesis openers (anything about what quality/success "requires" or "depends on" in general); persona lines ("I do X for a living", "X is my passion", "As a passionate..."); "Thank you for your time and consideration"; "I am eager to contribute"; "I look forward to hearing from you".
 
-STYLE: standard professional, plain everyday English, short sentences, active voice. At most FOUR tool/technology names in the whole letter. No rhetorical questions, no catchphrases.`
+STYLE: standard professional, plain everyday English, short sentences, active voice. At most FOUR tool/technology names in the whole letter. No rhetorical questions, no catchphrases.
+
+Never include a date, postal address, or contact-information header — the application adds those automatically. Start at the greeting.`
 
 const MAX_LETTER_CHARS = 2500
 

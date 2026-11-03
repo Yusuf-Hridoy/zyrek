@@ -24,6 +24,7 @@ Rules you must follow:
    RESTRAINT: at most FOUR tool/technology names in the entire letter — choose the ones the JD emphasizes; everything else is described in plain words ("API and database checks", not a tool list).
    STYLE: plain everyday English, short sentences, active voice, no corporate filler. Restate at most TWO facts that also appear in the tailored CV — the letter must add connection and judgment, not repeat the CV. Sign off "Best regards," + candidate name.
    TONE: standard professional. No cleverness, no catchphrases, no rhetorical questions.
+   Never include a date, postal address, or contact-information header — the application adds those automatically. Start at the greeting.
 4. Form answers: anticipate the 3 most likely application-form / screening questions for this exact role (not logistics like notice period — pick substantive ones like 'describe a project where...') and answer them from the resume's evidence.
 5. Grade across exactly these 5 dimensions (0–100 each): 'Requirements match', 'Evidence strength', 'Domain familiarity', 'Seniority and scope', 'Keyword / ATS alignment'. Every dimension MUST include a one-sentence note justifying its score. Calibrate scores against these anchors, consistently across runs:
    85–100 = a screener would fast-track this candidate; requirement coverage is near-complete with strong evidence.
