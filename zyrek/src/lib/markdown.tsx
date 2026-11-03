@@ -128,6 +128,39 @@ export function renderMarkdown(
     const heading = HEADING_RE.exec(line)
     if (heading) {
       const level = heading[1].length - 1
+      // Role row: "### Title | dates" — the LAST " | " is a layout delimiter
+      // (title left, dates right). h3s without it render exactly as before.
+      const split = level === 2 ? heading[2].lastIndexOf(' | ') : -1
+      if (split > 0 && heading[2].slice(split + 3).trim()) {
+        const title = heading[2].slice(0, split)
+        const dates = heading[2].slice(split + 3).trim()
+        blocks.push(
+          <h3
+            key={key}
+            data-role-row=""
+            className={
+              print
+                ? undefined
+                : `${HEADING_CLASS[2]} flex flex-wrap items-baseline justify-between gap-x-3`
+            }
+          >
+            <span className={print ? undefined : 'min-w-0'}>
+              {inline(title, `${key}-t`, print)}
+            </span>
+            <span
+              className={
+                print
+                  ? undefined
+                  : 'whitespace-nowrap text-[12px] font-normal text-[#5d574a]'
+              }
+            >
+              {inline(dates, `${key}-d`, print)}
+            </span>
+          </h3>,
+        )
+        i++
+        continue
+      }
       const cls = print ? undefined : HEADING_CLASS[level]
       const Tag = (['h1', 'h2', 'h3', 'h4'] as const)[level]
       blocks.push(

@@ -49,7 +49,8 @@ function looksLikeName(line: string): boolean {
 }
 
 function looksLikeContact(line: string): boolean {
-  if (line.startsWith('#')) return false
+  // Headings and the CV's bold TITLE line ("**QA Engineer**") are never contact.
+  if (line.startsWith('#') || /^\*\*.+\*\*$/.test(line)) return false
   return (
     line.includes('@') ||
     /linkedin|github|https?:\/\//i.test(line) ||

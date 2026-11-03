@@ -34,7 +34,8 @@ State lives in **`src/App.tsx` only**. Views are layout shells that receive prop
 
 `src/lib/` (all self-explanatory names — keep it that way):
 - `providers.ts` — provider registry (gemini / groq / openai / anthropic), per-provider key storage, `RateLimitError`
-- `gemini.ts` — shared `SYSTEM_PROMPT` (numbered rules 1–14) + Gemini structured-output call
+- `gemini.ts` — shared `SYSTEM_PROMPT` (numbered rules 1–15) + Gemini structured-output call
+- The tailored-CV markdown template (headings, bold title line, `### Role | dates` rows) lives in rule 2 of `SYSTEM_PROMPT`.
 - `openaiCompat.ts` — Groq/OpenAI caller (`response_format: json_object`; **omit `temperature` for OpenAI** — GPT-5.x rejects it) + exported `extractJson` hardening (fence strip → first `{` to last `}` → parse)
 - `anthropic.ts` — native Messages API; requires headers `anthropic-version` and `anthropic-dangerous-direct-browser-access: true` and a `max_tokens`; no JSON mode, so output goes through `extractJson`
 - `runAssay.ts` / `prep.ts` / `followup.ts` / `rewriteLetter.ts` (letter-only plain-text call, no JSON mode) — dispatch by provider kind + ONE-shot failover to the next provider with a saved key on `RateLimitError` only (never on invalid keys or 4xx)
@@ -42,6 +43,7 @@ State lives in **`src/App.tsx` only**. Views are layout shells that receive prop
 - `validate.ts` — repair-first validators (clamp, fallback, synthesize; throw only when unusable) + `unescapeArtifacts`
 - `radar.ts` / `insights.ts` — pure functions, no React, no `Date.now()` inside (timestamps passed in)
 - `markdown.tsx` — safe markdown → React elements (never `dangerouslySetInnerHTML`), screen + print variants
+- `markdown.tsx` convention: an h3 containing ` | ` is a role row — split on the LAST ` | `, title left, dates right (`data-role-row`); h3s without it render as plain headings.
 - `router.ts`, `backup.ts`, `ics.ts`, `print.ts`, `stuffingCheck.ts` (pure gap-discipline verifier: flags CV skills with no resume evidence), `ui.ts` (shared `cardClass`, `microLabel`, `STATUS_STYLES`, slug helper), `extractResume.ts`, `letterFormat.ts` (pure display-time cover-letter frame — header, day-first date, recipient, greeting, sign-off; never persisted)
 
 ## Rules that protect the AI layer

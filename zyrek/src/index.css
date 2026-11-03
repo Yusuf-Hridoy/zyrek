@@ -63,16 +63,31 @@ body {
   }
 
   #print-root h1 {
-    font-size: 17pt;
+    font-size: 16pt;
     font-weight: 700;
     margin: 0 0 4pt;
     break-after: avoid;
   }
+  /* Header block under the name: contact line(s) small and grey; the bold
+     title line (first line, or its own paragraph) slightly larger. */
+  #print-root h1 + p {
+    font-size: 9.5pt;
+    color: #333;
+  }
+  #print-root h1 + p > span:first-child > strong {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #111;
+  }
+  #print-root h1 + p:has(> span:only-child > strong:only-child) + p {
+    font-size: 9.5pt;
+    color: #333;
+  }
   #print-root h2 {
-    font-size: 12pt;
-    font-weight: 600;
+    font-size: 11pt;
+    font-weight: 700;
     border-bottom: 1px solid #999;
-    margin: 14pt 0 4pt;
+    margin: 12pt 0 4pt;
     padding-bottom: 2pt;
     break-after: avoid;
   }
@@ -81,6 +96,28 @@ body {
     font-weight: 600;
     margin: 8pt 0 3pt;
     break-after: avoid;
+  }
+  /* Role row ("### Title | dates"): title left, dates right on one line. */
+  #print-root h3[data-role-row] {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8pt;
+    font-size: 10.5pt;
+    font-weight: 700;
+    margin: 7pt 0 1pt;
+  }
+  #print-root h3[data-role-row] > span:last-child {
+    white-space: nowrap;
+    font-size: 9.5pt;
+    font-weight: 400;
+    color: #333;
+  }
+  #print-root h3[data-role-row] + p {
+    font-size: 9.5pt;
+    font-style: italic;
+    color: #444;
+    margin: 0 0 3pt;
   }
   #print-root h4 {
     font-size: 10.5pt;
@@ -93,11 +130,13 @@ body {
     break-inside: avoid;
   }
   #print-root ul {
+    list-style: disc;
     margin: 0 0 5pt;
     padding-left: 14pt;
     break-before: auto;
   }
   #print-root li {
+    font-size: 10pt;
     margin: 0 0 2pt;
     break-inside: avoid;
   }

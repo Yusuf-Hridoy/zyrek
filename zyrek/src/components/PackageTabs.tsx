@@ -226,6 +226,13 @@ export default function PackageTabs({
         </div>
       </div>
 
+      {tab !== 'answers' && onExportPdf && (
+        <p className="px-6 pt-3 text-[11px] text-[#5d574a]">
+          PDF tip: in the print dialog, untick "Headers and footers" once — your
+          browser remembers it.
+        </p>
+      )}
+
       {tab === 'letter' && rewriteError && (
         <div className="mx-6 mt-4 flex items-center justify-between gap-2 rounded-lg border border-[#e3b39d] bg-[#f7e8e0] px-4 py-3 text-[12.5px] text-[#8a3418]">
           <span className="min-w-0">{rewriteError}</span>
