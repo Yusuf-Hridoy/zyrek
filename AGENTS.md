@@ -6,7 +6,7 @@ Instructions for any AI coding agent working in this repo. Read fully before tou
 
 **Zyrek** is a personal career toolkit owned and used by one person. It takes a master resume + a pasted job description, makes ONE structured AI call, and returns a graded application package: verdict + score /100, 5 scoring dimensions with notes, a 3-reviewer panel (RECRUITER / HIRING MGR / FACT-CHECK), tailored CV (markdown), cover letter, form answers, and skill signals. Around that core: an application tracker (statuses, notes, contacts), a follow-up radar, cross-application insights, interview prep packs with flashcards, re-run score diffing, PDF export, and JSON backup/restore.
 
-- Live: https://zyrek-beryl-zeta.vercel.app/ (static Vite build on Vercel; root directory `zyrek`)
+- Live: https://zyrek-zn84.vercel.app/ (static Vite build on Vercel; root directory `zyrek`)
 - App code lives in `/zyrek`. Screenshots in `/docs/screenshots`.
 - **100% client-side.** No backend, no database, no accounts. User-supplied API keys; browser → AI provider directly; everything persists in localStorage only. This is a core product promise ("Built for one · never uploaded") — never add a server, telemetry, or external storage.
 

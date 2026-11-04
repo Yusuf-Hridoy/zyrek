@@ -2,7 +2,7 @@
 
 *The honest examiner. It reads the job, reads you, and tells you the truth before you hit apply.*
 
-**Live:** https://zyrek-beryl-zeta.vercel.app/
+**Live:** https://zyrek-zn84.vercel.app/
 
 Paste a job description, and Zyrek returns a complete application package — a tailored CV, a cover letter, and answers to the screening questions you are most likely to face — then grades it the way a real hiring team would. It runs entirely in your browser with your own AI key. There is no backend and no account.
 
