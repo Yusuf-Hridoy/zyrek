@@ -1,5 +1,6 @@
 import type { AssayResult } from '../types/assay'
 import { anthropicJson } from './anthropic'
+import { withBuiltContactLine } from './contactLine'
 import { assayApplication, SYSTEM_PROMPT } from './gemini'
 import { JSON_SHAPE_ADDENDUM, openaiCompatAssay } from './openaiCompat'
 import {
@@ -27,6 +28,17 @@ export async function runAssay(
   resume: string,
   jd: string,
 ): Promise<RunOutcome> {
+  /**
+   * The CV's contact line is rebuilt from the master resume on every run,
+   * whichever provider produced it. Models drop a separator between adjacent
+   * items often enough that the downloaded CV reads "a@b.com linkedin.com/in/x",
+   * so the line is taken from the resume rather than trusted from the model.
+   */
+  const fixContactLine = (result: AssayResult): AssayResult => ({
+    ...result,
+    tailoredCv: withBuiltContactLine(result.tailoredCv, resume),
+  })
+
   const callOne = (id: ProviderId): Promise<AssayResult> => {
     const key = keys[id]!
     const info = PROVIDERS[id]
@@ -43,7 +55,7 @@ export async function runAssay(
   }
 
   try {
-    const result = await callOne(active)
+    const result = fixContactLine(await callOne(active))
     return { result, usedProvider: active }
   } catch (e) {
     if (!isRateLimit(e)) throw e
@@ -60,7 +72,7 @@ export async function runAssay(
     }
 
     try {
-      const result = await callOne(fallbackId)
+      const result = fixContactLine(await callOne(fallbackId))
       return { result, usedProvider: fallbackId, fellBackFrom: active }
     } catch (fallbackError) {
       const fallbackMessage =
