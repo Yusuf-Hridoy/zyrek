@@ -81,7 +81,7 @@ State lives in **`src/App.tsx` only**. Views are layout shells that receive prop
 - Work arrives as phase briefs with numbered steps and an acceptance checklist. Follow steps in order; **the app must build and run after every step**; one commit per step where the brief says so.
 - Output COMPLETE files for everything touched — never `// rest unchanged` or `...` inside a touched file.
 - Do only what the brief scopes. Do not refactor, rename, restyle, or fix unrelated bugs while passing through — note them in a final comment instead.
-- Commit messages: conventional style, descriptive (`feat: …`, `fix: …`), never bare phase numbers.
+- Commit with EXACTLY the commit message the brief suggests. Never reuse or adapt a previous commit's message — a wrong commit message is a failed acceptance check.
 - Before finishing: run the brief's acceptance checklist mentally, then `npm run build` and `npm run lint` — both must be clean.
 
 ## Never do

@@ -1,37 +1,61 @@
 # Zyrek
 
-*a personal career toolkit, built for one. First module: **Zyrek** — the honest examiner: it reads the job, reads you, and tells you the truth before you hit apply.*
+*The honest examiner. It reads the job, reads you, and tells you the truth before you hit apply.*
 
-**Live demo:** https://zyrek-beryl-zeta.vercel.app/
+**Live:** https://zyrek-beryl-zeta.vercel.app/
 
-## Zyrek — paste any job, get a tailored, graded application
+Paste a job description, and Zyrek returns a complete application package — a tailored CV, a cover letter, and answers to the screening questions you are most likely to face — then grades it the way a real hiring team would. It runs entirely in your browser with your own AI key. There is no backend and no account.
 
-Zyrek takes any job description and your one master resume, and produces a complete application package: a tailored CV, a cover letter, and answers to the screening questions you're most likely to face. Before you send anything, a simulated three-person panel — a recruiter, a hiring manager, and a fact-checker — grades the package honestly.
+> The screenshots below show fictional sample data: an invented candidate, invented companies, and `example.com` contacts. None of it is real.
 
-![The graded scorecard with match score, dimension breakdown, and reviewer panel](docs/screenshots/assay-scorecard.png)
+![Zyrek's home screen: a saved master resume, a box for the job description, and a button to grade the application](docs/screenshots/home.png)
 
-![The tailored package tabs: CV, cover letter, and form answers](docs/screenshots/assay-tabs.png)
+*Three steps. Save your master resume once, paste any job post, run it.*
 
-![Zyrek on a mobile screen](docs/screenshots/assay-final-mobile.png)
+![A graded application: an 86/100 strong match with five dimension scores, a three-reviewer panel, and the tailored CV below](docs/screenshots/result.png)
 
-## How it works
+*One call returns the score, the reviewer panel, and the full package — tailored CV, cover letter, form answers.*
 
-- Save your master resume once — paste it or upload a PDF/DOCX, with text extracted entirely in your browser.
-- Paste any job description.
-- One structured call to Gemini builds the full package — CV, cover letter, and form answers — and you can export the tailored CV or cover letter as a clean PDF via your browser's print dialog.
-- Not happy with the letter? Rewrite it — a dedicated AI pass focused only on the letter.
-- The package is scored 0–100 across five dimensions and reviewed by the three-person panel, then auto-saved — each run becomes a tracked application on the **Applications** page: set its status (Saved → Applied → Interview → Offer / Rejected), keep private notes on it, and watch your pipeline stats at a glance.
-- Across all saved runs, an Insights panel shows what the market keeps demanding and where your evidence is repeatedly weak — and after you improve your resume, one click re-runs any old JD to prove the score moved.
-- For any saved run, generate an interview prep pack: the questions this exact JD makes likely — including probes at your weak spots — with honest STAR answers drawn only from your real resume, plus a flashcard practice mode.
-- The Applications page's follow-up radar flags applications gone silent (7 days after applying, 5 after an interview), drafts the polite nudge with your own AI key, and drops a reminder into your calendar as an .ics file.
+![The pipeline view: a follow-up radar with two silent applications, pipeline stats, and four tracked applications with their statuses](docs/screenshots/pipeline.png)
 
-## Privacy
+*Every run becomes a tracked application, with a radar that flags the ones gone quiet.*
 
-There is no backend. Your resume, API keys, and history live only in your browser's localStorage. Nothing is uploaded anywhere except the single prompt sent directly to the provider's API with your own key. The Settings page can export or restore a full backup of everything — history, notes, prep, keys, resume — as one JSON file.
+![The insights view: most-demanded skills across saved runs, the biggest evidence gaps, and the weakest scoring dimensions](docs/screenshots/insights.png)
+
+*Across everything you have run: what the market keeps asking for, and where your evidence keeps coming up short.*
+
+## What it does
+
+**Grading**
+
+- A score out of 100 across five dimensions — requirements match, evidence strength, domain familiarity, seniority and scope, keyword/ATS alignment — each with a one-line justification.
+- A three-reviewer panel on every run: a recruiter's six-second scan, a hiring manager's interview decision, and a fact-checker's verdict on anything unsupported.
+- A code-level integrity check cross-references the generated CV against your real resume and flags any skill that slipped in without evidence. Gaps stay gaps.
+
+**The package**
+
+- A tailored CV that keeps your own structure and your contact details exactly as you wrote them — reordered and reworded toward the job, never invented.
+- A cover letter framed for international applications: candidate header, day-first date, recipient block, greeting, and sign-off, applied at display time so it fits letters written earlier too. Not happy with it? **Rewrite** runs a second pass on the letter alone.
+- Answers to the three screening questions this role is most likely to ask, drawn from your resume's evidence.
+- Export the CV or the letter as a clean PDF through your browser's print dialog — no browser date, URL, or page-number stamps in the output.
+
+**After you apply**
+
+- A pipeline tracker: Saved → Applied → Interview → Offer / Rejected, with private notes and a contact per application.
+- A follow-up radar that flags applications gone silent — 7 days after applying, 5 after an interview — drafts the polite nudge with your own key, and exports a reminder as an `.ics` file.
+- Interview prep packs built from any saved run: the questions this exact job makes likely, including probes at your weak spots, with honest answers and a flashcard practice mode.
+- Insights across every saved run: the skills the market keeps demanding, your repeating evidence gaps, and your weakest dimensions.
+- Re-run any old job post against your current resume and see which scores moved.
+
+**Setup and data**
+
+- Four providers — Gemini, Groq, OpenAI, Claude — each with its own saved key and an optional per-provider model override. With more than one key saved, a rate-limited run fails over to the next provider automatically.
+- Backup and restore everything — history, notes, prep packs, keys, resume — as a single JSON file.
+- 100% client-side. Your resume and keys live in this browser's localStorage and nowhere else; the only network call is the one your own key makes to your chosen provider.
 
 ## Anti-fabrication
 
-The system prompt forbids inventing experience, metrics, employers, or skills — content may only be reframed, reordered, and emphasized from what actually exists in your real resume. A dedicated fact-check reviewer names anything that was softened, stretched, or is unsupported, and confirms what traces to real evidence. A code-level integrity check also cross-references every generated CV against the real resume and flags any skill that slipped in without evidence — gaps stay gaps.
+The system prompt forbids inventing experience, metrics, employers, or skills. Content may only be reframed, reordered, and emphasized from what is already in your resume. The fact-check reviewer names anything softened or stretched, and the integrity check catches claims the model let through. A missing skill is reported as missing.
 
 ## Run locally
 
@@ -41,7 +65,14 @@ npm install
 npm run dev
 ```
 
-Then add an API key from any of Gemini, Groq, OpenAI, or Claude via the key button in the app header — Gemini and Groq have free tiers; OpenAI and Claude are paid per use. Add one or more keys — with multiple keys saved, Zyrek fails over automatically when one provider is rate-limited.
+Then add an API key from Settings — Gemini and Groq have free tiers; OpenAI and Claude are paid per use.
+
+To regenerate the screenshots above after a UI change:
+
+```sh
+cd zyrek
+node scripts/take-readme-screenshots.mjs
+```
 
 ## Roadmap
 

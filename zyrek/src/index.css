@@ -62,6 +62,37 @@ body {
     line-height: 1.45;
   }
 
+  /* Page frame. `@page { margin: 0 }` is what kills the browser's own
+     date/URL/page-number stamps: a browser paints them INTO the page margin,
+     so with no margin they have nowhere to render — the PDF comes out clean
+     even when "Headers and footers" is left ticked in the print dialog.
+     Zero margin also drops the per-page spacing, so it is recreated with a
+     repeating table: thead/tfoot spacer rows repeat on EVERY printed page
+     (top and bottom), and .print-content supplies the left/right margin. */
+  #print-root .print-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  #print-root .print-table td {
+    padding: 0;
+    vertical-align: top;
+  }
+  #print-root thead {
+    display: table-header-group;
+  }
+  #print-root tfoot {
+    display: table-footer-group;
+  }
+  #print-root .print-spacer-top {
+    height: 14mm;
+  }
+  #print-root .print-spacer-bottom {
+    height: 12mm;
+  }
+  #print-root .print-content {
+    padding: 0 16mm;
+  }
+
   #print-root h1 {
     font-size: 16pt;
     font-weight: 700;
@@ -164,6 +195,6 @@ body {
 
   @page {
     size: A4;
-    margin: 16mm 18mm;
+    margin: 0;
   }
 }
