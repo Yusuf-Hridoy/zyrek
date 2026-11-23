@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { Fragment, type ReactNode } from 'react'
 import { unescapeArtifacts } from './validate'
 
 /**
@@ -26,6 +26,101 @@ import { unescapeArtifacts } from './validate'
 const INLINE_RE =
   /(\*\*(?=\S)[^*]+?(?<=\S)\*\*|\*(?=\S)[^*\n]+?(?<=\S)\*|`[^`\n]+`|\[[^\]\n]*\]\([^)\n]*\))/g
 
+// --- Auto-linking -----------------------------------------------------------
+// CVs and letters carry bare contact details ("linkedin.com/in/...", an email,
+// "yusufahmedd.netlify.app") that are not written as markdown links. A PDF link
+// annotation only exists where a real <a> was printed, so those runs become
+// anchors at render time. Deliberately conservative: a missed link is better
+// than a fake one.
+//
+// Bare domains are linked only when the last label is in this whitelist. That
+// is the guard keeping "Node.js", "Next.js", "data.json" and "file.txt" plain.
+const TLDS =
+  'com|net|org|io|dev|app|ai|me|co|edu|gov|info|biz|uk|de|nl|pl|pt|es|fr|it|se|no|fi|dk|ee|lv|lt|cz|at|ch|be|ie|ca|au|sg|jp|bd|in'
+
+const AUTOLINK_RE = new RegExp(
+  [
+    // 1. Full URL.
+    'https?:\\/\\/[^\\s<>]+',
+    // 2. Email (tried before bare domains so the local part is never dropped).
+    '[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}',
+    // 3. www.-prefixed host.
+    'www\\.[^\\s<>]+',
+    // 4. Bare domain with whitelisted TLD, optional path. The two lookaheads
+    //    reject "ecommerce.company" (the TLD must end its label) and
+    //    "mysite.app.js" (no further dotted word label may follow).
+    `(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\\.)+(?:${TLDS})(?![A-Za-z0-9-])(?!\\.[A-Za-z])(?:\\/[^\\s<>]*)?`,
+  ].join('|'),
+  'g',
+)
+
+// Sentence punctuation that sits after a link, never inside it. "|" is here
+// because the CV contact line separates its items with " | ".
+const TRAILING_RE = /[.,;:)\]|]+$/
+
+function autoHref(token: string): string | null {
+  let href: string
+  if (/^https?:\/\//i.test(token)) href = token
+  else if (token.includes('@') && !token.includes('/')) href = `mailto:${token}`
+  else href = `https://${token}`
+  // Same scheme restriction as markdown links — unchanged security rule.
+  return /^(https?:|mailto:)/.test(href) ? href : null
+}
+
+function linkEl(key: string, href: string, label: string, print: boolean) {
+  return (
+    <a
+      key={key}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={print ? undefined : 'text-[#b3492b] underline underline-offset-2'}
+    >
+      {label}
+    </a>
+  )
+}
+
+/**
+ * Turn emails, URLs and whitelisted bare domains inside one plain-text run
+ * into anchors. Never called for inline code, nor for text already parsed as
+ * a markdown link.
+ */
+function linkifyText(text: string, keyPrefix: string, print: boolean): ReactNode[] {
+  if (!text) return [text]
+  const out: ReactNode[] = []
+  let last = 0
+  let n = 0
+  AUTOLINK_RE.lastIndex = 0
+  let m: RegExpExecArray | null
+  while ((m = AUTOLINK_RE.exec(text)) !== null) {
+    const raw = m[0]
+    const token = raw.replace(TRAILING_RE, '')
+    if (!token) {
+      AUTOLINK_RE.lastIndex = m.index + raw.length
+      continue
+    }
+    if (token.length < raw.length) {
+      // Trimmed punctuation stays in the text stream.
+      AUTOLINK_RE.lastIndex = m.index + token.length
+    }
+    const href = autoHref(token)
+    if (!href) continue
+    if (m.index > last) out.push(text.slice(last, m.index))
+    out.push(linkEl(`${keyPrefix}-a${n++}`, href, token, print))
+    last = m.index + token.length
+  }
+  if (out.length === 0) return [text]
+  if (last < text.length) out.push(text.slice(last))
+  return out
+}
+
+function textRun(text: string, key: string, print: boolean): ReactNode {
+  const nodes = linkifyText(text, key, print)
+  if (nodes.length === 1 && typeof nodes[0] === 'string') return nodes[0]
+  return <Fragment key={key}>{nodes}</Fragment>
+}
+
 function inline(text: string, keyPrefix: string, print: boolean): ReactNode[] {
   const parts = text.split(INLINE_RE)
   return parts.map((part, i) => {
@@ -33,7 +128,7 @@ function inline(text: string, keyPrefix: string, print: boolean): ReactNode[] {
     if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
       return (
         <strong key={key} className={print ? undefined : 'font-semibold'}>
-          {part.slice(2, -2)}
+          {textRun(part.slice(2, -2), `${key}-s`, print)}
         </strong>
       )
     }
@@ -52,28 +147,18 @@ function inline(text: string, keyPrefix: string, print: boolean): ReactNode[] {
     if (part.startsWith('[')) {
       const m = part.match(/^\[([^\]\n]*)\]\(([^)\n]*)\)$/)
       if (m && /^(https?:|mailto:)/.test(m[2])) {
-        return (
-          <a
-            key={key}
-            href={m[2]}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={print ? undefined : 'text-[#b3492b] underline underline-offset-2'}
-          >
-            {m[1]}
-          </a>
-        )
+        return linkEl(key, m[2], m[1], print)
       }
       return part
     }
     if (/^\*\S(?:[^*\n]*\S)?\*$/.test(part)) {
       return (
         <em key={key} className={print ? undefined : 'italic'}>
-          {part.slice(1, -1)}
+          {textRun(part.slice(1, -1), `${key}-e`, print)}
         </em>
       )
     }
-    return part
+    return textRun(part, key, print)
   })
 }
 
